@@ -1,0 +1,23 @@
+<p>
+  La table devrait être...
+</p>
+
+<ngx-table
+  [actionButtons]="buttons"
+  [columnSettings]="columns"
+  [data]="customers"
+  [enableColumnSorting]="false"
+  [enableColumnFiltering]="false"
+  [localPagination]="true"
+  [elementPerPage]="elementPerPage"
+  [elementPerPageList]="elementPerPageList"
+  (onClickActionButton)="onActionButtonClicked($event)"
+
+>
+
+</ngx-table>
+
+<p>
+  ... entre ça.
+</p>
+<!--<router-outlet></router-outlet>-->
