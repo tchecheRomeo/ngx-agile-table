@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-agile-table": [
+        "dist/ngx-agile-table"
+      ],
+      "ngx-agile-table/*": [
+        "dist/ngx-agile-table/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

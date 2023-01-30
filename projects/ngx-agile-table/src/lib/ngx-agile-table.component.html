@@ -1,0 +1,160 @@
+<div class="ngx-table">
+  <div class="flex-end mt-3 mb-2">
+    <input *ngIf="displayGlobalSearchInput" id="search" type="text"
+           [(ngModel)]="globalSearchKeywords" placeholder="{{searchText}}"
+           (keyup.enter)="globalSearchRequest()">
+  </div>
+
+  <div>
+    <div>
+      <div [ngClass]="actionButtons && actionButtons.length != 0 ? 'responsive' : ''">
+
+        <table class="table-border table-hover" *ngIf="columnSettings">
+
+          <thead>
+
+          <th *ngIf="actionButtons && actionButtons.length != 0">
+            {{actionButtonTitle}}
+          </th>
+          <ng-container *ngFor="let column of columnSettings; let i=index">
+            <th *ngIf="column.display" [ngStyle]="column.width ? {'width': column.width} : {}">
+              <div class="w-100 text-center"
+                   title="{{column.title}}">
+                <input class="column-direction" #sortColumnDirection type="checkbox" hidden/>
+                <strong *ngIf="!enableColumnSorting">{{column.title}}</strong>
+                <strong *ngIf="enableColumnSorting" class="sort"
+                        (click)="sortByColumn(column.nameProperty, sortColumnDirection)">
+                  {{column.title}}
+                </strong>
+              </div>
+              <input *ngIf="enableColumnFiltering" class="column-key-search" #filterKeyword class="table-input"
+                     type="text"
+                     placeholder="{{column.title}}"
+                     (keyup)="filterTable(column.nameProperty, filterKeyword.value)"/>
+            </th>
+          </ng-container>
+          </thead>
+          <tbody [ngStyle]="height.length != 0 ? {'max-height': height} : {}">
+          <tr *ngFor="let row of rowsToDisplay; let i=index"
+              [ngClass]="colorVariationLineBreak !== 0 && (i + 1) % colorVariationLineBreak == 0 ? 'table-mark' : ''" #nativeElement>
+            {{ rowDisplayed(row.data, nativeElement)}}
+
+            <td *ngIf="actionButtons && actionButtons.length != 0">
+              <div class="flex-center">
+                <ng-container *ngFor="let actionButton of row.actionButtons">
+                  <div class="action-button action-button-margin" title="{{actionButton.tooltip}}"
+                       (click)="onActionButtonClicked(actionButton, i)">
+                    <div *ngIf="actionButton.html.length != 0" [innerHtml]="sanitize(actionButton.html)"></div>
+
+                    <ng-container *ngIf="actionButton.html.length == 0 && actionButton.icon.length != 0">
+                      <img *ngIf="actionButton.icon.includes('/')" [src]="actionButton.icon"
+                           alt="{{actionButton.tooltip}}">
+                      <i *ngIf="!actionButton.icon.includes('/')" class="{{actionButton.icon}}"></i>
+                    </ng-container>
+
+                    <a *ngIf="actionButton.html.length == 0 && actionButton.icon.length == 0">{{actionButton.text}}</a>
+
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="row.collapsedActionButtons.length !== 0">
+                  <div class="action-button action-button-margin" title="{{collapseActionButton.tooltip}}">
+                    <ul class="collapse-action-button">
+                      <li>
+                        <div *ngIf="collapseActionButton.html.length != 0" [innerHtml]="sanitize(collapseActionButton.html)"></div>
+
+                        <ng-container *ngIf="collapseActionButton.html.length == 0 && collapseActionButton.icon.length != 0">
+                          <img *ngIf="collapseActionButton.icon.includes('/')" [src]="collapseActionButton.icon"
+                               alt="{{collapseActionButton.tooltip}}">
+                          <i *ngIf="!collapseActionButton.icon.includes('/')" class="{{collapseActionButton.icon}}"></i>
+                        </ng-container>
+
+                        <a *ngIf="collapseActionButton.html.length == 0 && collapseActionButton.icon.length == 0">
+                          {{collapseActionButton.text}}
+                        </a>
+                        <ul class="collapse-container {{ getCollapsePosition() }}">
+                          <li *ngFor="let collapsedButton of row.collapsedActionButtons">
+                            <div class="collapse-button" title="{{collapsedButton.tooltip}}"
+                                 (click)="onActionButtonClicked(collapsedButton, i)">
+                              <div *ngIf="collapsedButton.html.length != 0" [innerHtml]="sanitize(collapsedButton.html)"></div>
+
+                              <ng-container *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length != 0">
+                                <img *ngIf="collapsedButton.icon.includes('/')" [src]="collapsedButton.icon"
+                                     alt="{{collapsedButton.tooltip}}">
+                                <i *ngIf="!collapsedButton.icon.includes('/')" class="{{collapsedButton.icon}}"></i>
+                              </ng-container>
+
+                              <a *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length == 0">{{collapsedButton.text}}</a>
+
+                            </div>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </ng-container>
+              </div>
+            </td>
+
+            <ng-container *ngFor="let column of columnSettings; let i=index">
+              <td *ngIf="column.display"
+                  title="{{tableDataTitleAttribute(row.data,column.nameProperty)}}">
+                <div [innerHtml]="columnDisplayValue(row.data,column)"></div>
+              </td>
+            </ng-container>
+          </tr>
+          <tr *ngIf="rowsToDisplay.length === 0" class="table-no-content">
+            <td [attr.colspan]="actionButtons && actionButtons.length != 0 ? columnSettings.length + 1 : columnSettings.length">
+              {{emptyText}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="table-footer">
+      <div class="flex-between m-3"
+           *ngIf="totalPages && totalElements && totalElements !== elementPerPage">
+        <div *ngIf="totalElementsText.length !== 0">
+          {{totalElementsText}}: {{rowsToDisplay.length !== 0 ? (rowsToDisplay.length + '/' + totalElements) : 0}}
+        </div>
+        <div class="flex mt-2 mb-2">
+          <div class="mr-1 size" *ngIf="maxSizeText.length !== 0">{{maxSizeText}}:</div>
+          <select [(ngModel)]="elementPerPage" (change)="onElementPerPageChange()">
+            <option *ngFor="let element of elementPerPageList">{{element}}</option>
+          </select>
+          <nav>
+            <ul class="table-pagination justify-content-center">
+              <li class="table-page-item" [ngClass]="pageStart <= pagesRangeLimit ? 'disabled' : ''">
+                <a class="table-page-link" (click)="previousPages()">
+                  <ng-container *ngIf="paginationPreviousIcon.length !== 0">
+                    <img *ngIf="paginationPreviousIcon.includes('/')" [src]="paginationPreviousIcon">
+                    <i *ngIf="!paginationPreviousIcon.includes('/')" class="{{paginationPreviousIcon}}"></i>
+                  </ng-container>
+                  <ng-container *ngIf="paginationPreviousIcon.length === 0">
+                    {{paginationPreviousText}}
+                  </ng-container>
+                </a>
+              </li>
+              <li class="table-page-item" *ngFor="let page of pages()"
+                  [ngClass]="page == pageSelected ? 'active' : ''">
+                <a class="table-page-link" (click)="onPageChange(page)">{{page}}</a>
+              </li>
+              <li class="table-page-item" [ngClass]="pageStart + pagesRangeLimit - 1 >= totalPages ? 'disabled' : ''">
+                <a class="table-page-link" (click)="nextPages()">
+                  <ng-container *ngIf="paginationNextIcon.length !== 0">
+                    <img *ngIf="paginationNextIcon.includes('/')" [src]="paginationNextIcon">
+                    <i *ngIf="!paginationNextIcon.includes('/')" class="{{paginationNextIcon}}"></i>
+                  </ng-container>
+                  <ng-container *ngIf="paginationNextIcon.length === 0">
+                    {{paginationNextText}}
+                  </ng-container>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin: 0; opacity: 0;height: 0;width: 0;">Built with love by Klaus Laghom and Romeo Njinang</div>
+</div>

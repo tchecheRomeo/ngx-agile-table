@@ -124,6 +124,41 @@
           }
         }
       }
+    },
+    "ngx-agile-table": {
+      "projectType": "library",
+      "root": "projects/ngx-agile-table",
+      "sourceRoot": "projects/ngx-agile-table/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-agile-table/tsconfig.lib.json",
+            "project": "projects/ngx-agile-table/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-agile-table/src/test.ts",
+            "tsConfig": "projects/ngx-agile-table/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-agile-table/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-agile-table/tsconfig.lib.json",
+              "projects/ngx-agile-table/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "ngx-agile-table-v8"
 }
