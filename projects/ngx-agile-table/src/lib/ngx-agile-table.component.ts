@@ -3,6 +3,7 @@ import {ActionButtonTable} from './models/action-button-table.model';
 import {ColumnTable} from './models/column-table.model';
 import {NgxAgileTableService} from './ngx-agile-table.service';
 import {RowTable} from './models/row-table.model';
+import {CellData} from './models/cell-data.model';
 
 
 class RowData {
@@ -114,10 +115,10 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   globalSearchKeywords = '';
 
   columnSearchKeyword = '';
-  columnSearchAttr = '';
+  columnSearch: ColumnTable;
 
   columnSortDirectionAsc = false;
-  columnSortAttr = '';
+  columnSort: ColumnTable;
   rows: Row[] = [];
   rowsToDisplay: Row[] = [];
 
@@ -153,17 +154,26 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
       row.actionButtons = [];
       row.collapsedActionButtons = [];
 
-      for (const actionButton of this.actionButtons) {
-        canDisplayButton = actionButton.displayConditionFn(
-          this.data.find(d => JSON.stringify(dt) === JSON.stringify(d))
-        );
+      if (this.actionButtons.length <= this.maxActionButtonPerRow) {
+        row.actionButtons = row.actionButtons.concat(this.actionButtons);
+      } else {
+        for (const actionButton of this.actionButtons) {
+          canDisplayButton = actionButton.displayConditionFn(
+            this.data.find(d => JSON.stringify(dt) === JSON.stringify(d))
+          );
 
-        if (canDisplayButton) {
-          if (row.actionButtons.length < this.maxActionButtonPerRow - 1) { // -1 for collapse button
-            row.actionButtons.push(actionButton);
-          } else {
-            row.collapsedActionButtons.push(actionButton);
+          if (canDisplayButton) {
+            if (row.actionButtons.length < this.maxActionButtonPerRow - 1) { // -1 for collapse button
+              row.actionButtons.push(actionButton);
+            } else {
+              row.collapsedActionButtons.push(actionButton);
+            }
           }
+        }
+        if (row.collapsedActionButtons.length !== 0 &&
+          (row.actionButtons.length + row.collapsedActionButtons.length) <= this.maxActionButtonPerRow) {
+          row.actionButtons = row.actionButtons.concat(row.collapsedActionButtons);
+          row.collapsedActionButtons = [];
         }
       }
 
@@ -277,12 +287,16 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     data = data ? data : this.rows;
 
     if (data) {
-      if (page === 1) {
-        return data.slice(0, this.elementPerPage);
-      } else if (data.length >= this.elementPerPage * page) {
-        return data.slice((page - 1) * this.elementPerPage, page * this.elementPerPage);
+      if (this.totalPages === 0) {
+        return data;
       } else {
-        return data.slice((page - 1) * this.elementPerPage, this.rows.length);
+        if (page === 1) {
+          return data.slice(0, this.elementPerPage);
+        } else if (data.length >= this.elementPerPage * page) {
+          return data.slice((page - 1) * this.elementPerPage, page * this.elementPerPage);
+        } else {
+          return data.slice((page - 1) * this.elementPerPage, this.rows.length);
+        }
       }
     }
     return [];
@@ -314,9 +328,9 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   onPageChange(page: number) {
     if (this.localPagination) {
       if (this.columnSearchKeyword && this.columnSearchKeyword !== '') {
-        this.filterTable(this.columnSearchAttr, this.columnSearchKeyword, page);
-      } else if (this.columnSortAttr && this.columnSortAttr !== '') {
-        this.sortDataDisplay(this.columnSortAttr, this.columnSortDirectionAsc, page);
+        this.filterTable(this.columnSearch, this.columnSearchKeyword, page);
+      } else if (this.columnSort) {
+        this.sortDataDisplay(this.columnSort, this.columnSortDirectionAsc, page);
       } else {
         this.rowsToDisplay = this.segmentation(page);
       }
@@ -329,9 +343,9 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   onElementPerPageChange() {
     if (this.localPagination) {
       if (this.columnSearchKeyword && this.columnSearchKeyword !== '') {
-        this.filterTable(this.columnSearchAttr, this.columnSearchKeyword, 1);
-      } else if (this.columnSortAttr && this.columnSortAttr !== '') {
-        this.sortDataDisplay(this.columnSortAttr, this.columnSortDirectionAsc, 1);
+        this.filterTable(this.columnSearch, this.columnSearchKeyword, 1);
+      } else if (this.columnSort) {
+        this.sortDataDisplay(this.columnSort, this.columnSortDirectionAsc, 1);
       } else {
         this.resetTotalPages();
         this.rowsToDisplay = this.segmentation(1);
@@ -341,10 +355,11 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     }
   }
 
-  filterTable(attr: any, keyword: string, page?: number) {
+  filterTable(columnTable: ColumnTable, keyword: string, page?: number) {
     let searchResults: any[];
     if (keyword && keyword !== '') {
-      searchResults = this.rows.filter(r => (this.columnValue(r.data, attr, false) + '').toLowerCase().includes(keyword.toLowerCase()));
+      searchResults = this.rows.filter(r => this.cellDataValue(r.data, columnTable)
+        .researchData.toLowerCase().includes(keyword.toLowerCase()));
     } else {
       searchResults = this.rows;
     }
@@ -353,31 +368,31 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     this.resetTotalPages(searchResults);
 
     this.columnSearchKeyword = keyword;
-    this.columnSearchAttr = attr;
+    this.columnSearch = columnTable;
   }
 
-  sortDataDisplay(attr: any, ascFiltering: boolean, page?: number) {
+  sortDataDisplay(columnTable: ColumnTable, ascFiltering: boolean, page?: number) {
     let searchResults: any[];
 
     if (ascFiltering) {
       searchResults = this.rows.sort((a, b) => {
-        let value = this.columnValue(a.data, attr, false);
-        let value2 = this.columnValue(b.data, attr, false);
+        let value: any = this.cellDataValue(a.data, columnTable).researchData;
+        let value2: any = this.cellDataValue(b.data, columnTable).researchData;
         value = parseFloat(value) ? parseFloat(value) : value;
         value2 = parseFloat(value2) ? parseFloat(value2) : value2;
 
         if (value < value2) {
           return 1;
         }
-        if ((value > value2)) {
+        if (value > value2) {
           return -1;
         }
         return 0;
       });
     } else {
       searchResults = this.rows.sort((a, b) => {
-        let value = this.columnValue(a.data, attr, false);
-        let value2 = this.columnValue(b.data, attr, false);
+        let value: any = this.cellDataValue(a.data, columnTable).researchData;
+        let value2: any = this.cellDataValue(b.data, columnTable).researchData;
         value = parseFloat(value) ? parseFloat(value) : value;
         value2 = parseFloat(value2) ? parseFloat(value2) : value2;
 
@@ -395,7 +410,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     this.resetTotalPages(searchResults);
 
     this.columnSortDirectionAsc = ascFiltering;
-    this.columnSortAttr = attr;
+    this.columnSort = columnTable;
   }
 
   sortByColumn(attr: any, sortColumnDirection: any) {
@@ -415,15 +430,13 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     }
   }
 
-  tableDataTitleAttribute(data: any, columnProperty: string) {
-    const value: string = '' + this.columnValue(data, columnProperty, false);
+  tableDataTitleAttribute(data: any, columnTable: ColumnTable) {
+    const value: string = '' + this.cellDataValue(data, columnTable).value;
     if (value.includes('<') && value.includes('>')) {
       return '';
     } else {
       return value;
     }
-
-
   }
 
   columnValue(data: any, columnProperty: string, sanitize?: boolean): any {
@@ -453,13 +466,35 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     }
   }
 
-  columnDisplayValue(data: any, columnTable: ColumnTable): any {
+  cellDataValue(data: any, columnTable: ColumnTable): CellData {
     const originalValue = this.columnValue(data, columnTable.nameProperty, false);
-    const displayValue = columnTable.customCellFn(originalValue, data);
-    if (displayValue.length !== 0) { // If not default value : Default value returned by customCellFn() is empty string
-      return this.sanitize(displayValue);
+    const customCellData: any = columnTable.customCellFn(originalValue, data);
+    let cellData: CellData;
+    if (customCellData) {
+      if (customCellData.value) {
+        cellData = CellData.valueOf(customCellData);
+      } else if ((customCellData + '').length !== 0) {
+        if ((originalValue + '').length !== 0) {
+          cellData = new CellData((customCellData + ''), originalValue);
+        } else {
+          cellData = new CellData((customCellData + '')); // For custom cell who don't have original property value
+        }
+      } else  {
+        cellData = new CellData();
+      }
     } else {
-      return originalValue;
+      cellData = new CellData(originalValue);
+    }
+    cellData.original = originalValue;
+    return cellData;
+  }
+
+  columnDisplayValue(data: any, columnTable: ColumnTable): any {
+    const cellData: CellData = this.cellDataValue(data, columnTable);
+    if (cellData.value.length !== 0) { // If not default value : Default value returned by customCellFn() is empty string
+      return this.sanitize(cellData.value);
+    } else {
+      return cellData.original;
     }
   }
 

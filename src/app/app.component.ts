@@ -1,5 +1,7 @@
 import {Component, OnInit, Renderer2} from '@angular/core';
 import {ColumnTable, ActionButtonTable, RowTable} from 'ngx-agile-table';
+import {CellData} from '../../projects/ngx-agile-table/src/lib/models/cell-data.model';
+import {DecimalPipe} from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -25,19 +27,22 @@ export class AppComponent implements OnInit {
     new ActionButtonTable('reject', 'Reject')
       .htmlValue('<img class="red-bg" src="/assets/icons/discard.png" alt="Image">'),
     new ActionButtonTable('edit', 'Edit')
-      .htmlValue('<img class="edit-bg" src="/assets/icons/edit.png" alt="Image">'),
-    new ActionButtonTable('see', 'See')
-      .htmlValue('<img class="edit-bg" src="/assets/icons/eyes.png" alt="Image">'),
-    new ActionButtonTable('plug', 'Plug'),
-    new ActionButtonTable('check', 'Play')
+      .htmlValue('<img class="edit-bg" src="/assets/icons/edit.png" alt="Image">')
   ];
 
   transactionColumns: ColumnTable[] = [
     new ColumnTable('Date', 'date'),
     new ColumnTable('Customer Name', 'customerName'),
+    new ColumnTable('Customer Gender', 'customerMale').customCell(data => {
+      const value = data ? 'Male' : 'Female';
+      return new CellData('<mark>' + value + '</mark>', value);
+    }),
     new ColumnTable('Beneficiary Name', 'beneficiaryName'),
-    new ColumnTable('Amount', 'amount').customCell(data => '<strong>' + data + '</strong>'),
-    new ColumnTable('Fees (20% amount)', 'fees').customCell((cellData, data) => data.amount * 20 / 100 + ''),
+    new ColumnTable('Amount', 'amount').customCell(data => {
+      const value = this.decimalPipe.transform(data, '3.');
+      return new CellData('<strong>' + value + '</strong>', value);
+    }),
+    new ColumnTable('Fees (20% amount)', 'fees').customCell((cellData, data) => data.amount * 20 / 100),
     new ColumnTable('Status', 'status').customCell(data => {
       if (data === this.failStatus) {
         return '<div style="display: flex; justify-content: center;">' +
@@ -53,7 +58,7 @@ export class AppComponent implements OnInit {
     })
   ];
 
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2, private decimalPipe: DecimalPipe) {
 
   }
 
@@ -109,7 +114,8 @@ export class AppComponent implements OnInit {
         beneficiaryName: 'Klaus ' + i ,
         date: new Date().toISOString().replace('T', ' ').replace('Z', ''),
         amount: Math.floor(10 * Math.random() + 1) * 500,
-        status: Math.floor(10 * Math.random()) % 2 === 0 ? this.successStatus : this.failStatus
+        status: Math.floor(10 * Math.random()) % 2 === 0 ? this.successStatus : this.failStatus,
+        customerMale: Math.floor(10 * Math.random()) % 4 === 0
       });
     }
 

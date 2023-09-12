@@ -1,3 +1,4 @@
+import {CellData} from './cell-data.model';
 /**
  * Created by romeo on 24/10/2021.
  */
@@ -7,7 +8,7 @@ export class ColumnTable {
   nameProperty: string; // Name of property in data list
   display: boolean;
   width: string;
-  customCellFn: (cellData: any, data?: any) => string;
+  customCellFn: (cellData: any, data?: any) => CellData | string | number;
 
   constructor(title: string, nameProperty?: string, display?: boolean, width?: string) {
     this.title = title;
@@ -37,7 +38,7 @@ export class ColumnTable {
     return this;
   }
 
-  customCell(cellDefinition: (cellData: any, data?: any) => string): ColumnTable {
+  customCell(cellDefinition: (cellData: any, data?: any) => CellData | string | number): ColumnTable {
     this.customCellFn = cellDefinition;
     return this;
   }

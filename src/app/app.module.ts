@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {FormsModule} from '@angular/forms';
 import {NgxAgileTableModule} from 'ngx-agile-table';
+import {DecimalPipe} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import {NgxAgileTableModule} from 'ngx-agile-table';
     NgxAgileTableModule,
     FormsModule
   ],
-  providers: [],
+  providers: [DecimalPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {

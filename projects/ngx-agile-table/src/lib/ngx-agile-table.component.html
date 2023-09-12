@@ -23,14 +23,14 @@
                 <input class="column-direction" #sortColumnDirection type="checkbox" hidden/>
                 <strong *ngIf="!enableColumnSorting">{{column.title}}</strong>
                 <strong *ngIf="enableColumnSorting" class="sort"
-                        (click)="sortByColumn(column.nameProperty, sortColumnDirection)">
+                        (click)="sortByColumn(column, sortColumnDirection)">
                   {{column.title}}
                 </strong>
               </div>
               <input *ngIf="enableColumnFiltering" class="column-key-search" #filterKeyword class="table-input"
                      type="text"
                      placeholder="{{column.title}}"
-                     (keyup)="filterTable(column.nameProperty, filterKeyword.value)"/>
+                     (keyup)="filterTable(column, filterKeyword.value)"/>
             </th>
           </ng-container>
           </thead>
@@ -97,7 +97,7 @@
 
             <ng-container *ngFor="let column of columnSettings; let i=index">
               <td *ngIf="column.display"
-                  title="{{tableDataTitleAttribute(row.data,column.nameProperty)}}">
+                  title="{{tableDataTitleAttribute(row.data,column)}}">
                 <div [innerHtml]="columnDisplayValue(row.data,column)"></div>
               </td>
             </ng-container>
