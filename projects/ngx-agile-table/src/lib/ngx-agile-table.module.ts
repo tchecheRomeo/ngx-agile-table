@@ -3,6 +3,7 @@ import { NgxAgileTableComponent } from './ngx-agile-table.component';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {NgxAgileTableService} from './ngx-agile-table.service';
+import {TranslateModule} from '@ngx-translate/core';
 
 
 
@@ -12,7 +13,8 @@ import {NgxAgileTableService} from './ngx-agile-table.service';
   ],
   imports: [
     FormsModule,
-    CommonModule
+    CommonModule,
+    TranslateModule
   ],
   exports: [
     NgxAgileTableComponent

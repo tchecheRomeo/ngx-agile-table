@@ -1,6 +1,6 @@
 {
   "name": "ngx-agile-table",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "keywords": [
     "angular",
     "typescript",
@@ -15,6 +15,12 @@
   "description": "Responsive and Reactive Table build with love using Angular",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
+    "@angular/core": "^8.2.14",
+    "@ngx-translate/core": "^12.0.0",
+    "@ngx-translate/http-loader": "^4.0.0"
+  },
+  "devDependencies": {
+    "@ngx-translate/core": "^12.0.0",
+    "@ngx-translate/http-loader": "^4.0.0"
   }
 }

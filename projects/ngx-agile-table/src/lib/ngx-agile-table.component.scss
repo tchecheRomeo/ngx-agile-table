@@ -197,12 +197,16 @@ table thead th {
   color: black;
 }
 
-table td {
+table td .cell-content {
   max-width: 250px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding: .5em 1em;
+}
+
+table td .action-button {
+  padding: .5rem 1rem;
 }
 
 table tr {

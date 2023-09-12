@@ -1,26 +1,28 @@
 <h1>
-  Basic usage
+  {{'text.basic_usage' | translate }}
 </h1>
 
-<p>List of students</p>
+<p>{{'text.students_list' | translate }}</p>
 
 <ngx-table
   [columnSettings]="customerColumns"
   [data]="customers"
+  [emptyText]="'text.empty_data'"
 >
 
 </ngx-table>
 
 <h1>
-  Fully CSS customization
+  {{'text.full_customization' | translate }}
 </h1>
 
-<p>List of students customized</p>
+<p>{{'text.students_list_customized' | translate }}</p>
 
 <div class="customization">
   <ngx-table
     [columnSettings]="customerColumns"
     [data]="customers"
+    [emptyText]="'text.empty_data'"
   >
 
   </ngx-table>
@@ -28,20 +30,20 @@
 
 
 <h1>
-  Fully Configurable Inputs
+  {{'text.full_configurable' | translate }}
 </h1>
 
 <table>
   <tbody>
   <tr>
-    <td>Column filtering</td>
+    <td>{{'text.column_filtering' | translate }}</td>
     <td>
       <label class="switch">
         <input type="checkbox" [(ngModel)]="enableColumnFiltering">
         <span class="slider round"></span>
       </label>
     </td>
-    <td>Column sorting</td>
+    <td>{{'text.column_sorting' | translate }}</td>
     <td>
       <label class="switch">
         <input type="checkbox" [(ngModel)]="enableColumnSorting">
@@ -50,47 +52,56 @@
     </td>
   </tr>
   <tr>
-    <td>Local pagination</td>
+    <td>{{'text.local_pagination' | translate }}</td>
     <td>
       <label class="switch">
         <input type="checkbox" [(ngModel)]="localPagination">
         <span class="slider round"></span>
       </label>
     </td>
-    <td>Element per page : </td>
+    <td>{{'text.element_per_page' | translate }} : </td>
     <td>
         <input type="number" [(ngModel)]="elementPerPage" [disabled]="!localPagination">
     </td>
   </tr>
   <tr>
-    <td>Max number action button by row : </td>
+    <td>{{'text.max_number_action_button_by_row' | translate }} : </td>
     <td>
         <input type="number" [(ngModel)]="maxActionButtonPerRow">
     </td>
-    <td>Position collapsed action button</td>
+    <td>{{'text.position_collapsed_action_button' | translate }}</td>
     <td>
         <select [(ngModel)]="collapseButtonPosition">
-          <option value="default">Default</option>
-          <option value="bottom">Bottom</option>
-          <option value="right">Right</option>
+          <option value="default">{{'text.default' | translate }}</option>
+          <option value="bottom">{{'text.bottom' | translate }}</option>
+          <option value="right">{{'text.right' | translate }}</option>
         </select>
     </td>
   </tr>
   <tr>
-    <td>Dangerous transaction (red row) with amount between : </td>
+    <td>{{'text.dangerous_transaction' | translate }} : </td>
     <td>
         <input type="number" [(ngModel)]="dangerousAmountMin" (keyup.enter)="transactions = [].concat(transactions)">
     </td>
     <td>
         <input type="number" [(ngModel)]="dangerousAmountMax" (keyup.enter)="transactions = [].concat(transactions)">
     </td>
-    <td>(Press "Enter" to view changes)</td>
+    <td>{{'text.submit_dangerous_transaction_with_enter' | translate }}</td>
+  </tr>
+  <tr>
+    <td>{{'text.lang' | translate }}</td>
+    <td>
+        <select [(ngModel)]="lang" (change)="changeLanguage()">
+          <option value="fr">{{'text.fr' | translate }}</option>
+          <option value="en">{{'text.en' | translate }}</option>
+        </select>
+    </td>
   </tr>
 
   </tbody>
 </table>
 
-<p>List of transactions</p>
+<p>{{'text.transactions_list' | translate }}</p>
 <ngx-table
   [actionButtons]="actionButtons"
   [collapseActionButtonPosition]="collapseButtonPosition"
@@ -104,7 +115,11 @@
   [elementPerPageList]="elementPerPageList"
   (onClickActionButton)="onActionButtonClicked($event)"
   (onRowDisplayed)="onRowDisplayed($event)"
+  [emptyText]="'text.empty_data'"
+  [maxSizeText]="'text.max_size'"
+  [totalElementsText]="'text.total_elements'"
+  [paginationPreviousText]="'text.previous'"
+  [paginationNextText]="'text.next'"
 >
 
 </ngx-table>
-<!--<router-outlet></router-outlet>-->

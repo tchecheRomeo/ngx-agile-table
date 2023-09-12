@@ -358,8 +358,8 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   filterTable(columnTable: ColumnTable, keyword: string, page?: number) {
     let searchResults: any[];
     if (keyword && keyword !== '') {
-      searchResults = this.rows.filter(r => this.cellDataValue(r.data, columnTable)
-        .researchData.toLowerCase().includes(keyword.toLowerCase()));
+      searchResults = this.rows.filter(r => (this.cellDataValue(r.data, columnTable)
+        .researchData + '').toLowerCase().includes(keyword.toLowerCase()));
     } else {
       searchResults = this.rows;
     }
@@ -479,7 +479,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
         } else {
           cellData = new CellData((customCellData + '')); // For custom cell who don't have original property value
         }
-      } else  {
+      } else {
         cellData = new CellData();
       }
     } else {

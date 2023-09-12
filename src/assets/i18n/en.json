@@ -1,0 +1,59 @@
+{
+  "text": {
+    "basic_usage": "Basic usage",
+    "students_list": "List of students",
+    "full_customization": "Fully customizable CSS",
+    "students_list_customized": "List of students customized",
+    "full_configurable": "Fully Configurable Inputs",
+    "column_filtering": "Column filtering",
+    "column_sorting": "Column sorting",
+    "local_pagination": "Local pagination",
+    "element_per_page": "Element per page",
+    "max_number_action_button_by_row": "Max number action button by row",
+    "position_collapsed_action_button": "Position collapsed action button",
+    "default": "Default",
+    "bottom": "Bottom",
+    "right": "Right",
+    "lang": "Language",
+    "fr": "French",
+    "en": "English",
+    "dangerous_transaction": "Dangerous transaction (red row) with amount between",
+    "submit_dangerous_transaction_with_enter": "(Press 'Enter' to view changes)",
+    "transactions_list": "List of transactions",
+    "max_size": "Element per page",
+    "total_elements": "Total rows",
+    "previous": "Previous",
+    "next": "Next",
+    "empty_data": "No content",
+    "female": "Female",
+    "male": "Male"
+  },
+  "column": {
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "age": "Age",
+    "country": "Country",
+    "first_po_box": "First P.O Box",
+    "date": "Date",
+    "customer_name": "Customer Name",
+    "customer_gender": "Customer Gender",
+    "beneficiary_name": "Beneficiary Name",
+    "amount": "Amount",
+    "fees": "Fees (20% amount)",
+    "status": "Status"
+  },
+  "button": {
+    "delete": "Delete",
+    "valid": "Valid",
+    "reject": "Reject",
+    "edit": "Edit",
+    "see": "See",
+    "retry": "Retry",
+    "cancel": "Cancel"
+  },
+  "alert": {
+    "edit_customer": "Trying to edit customer transaction",
+    "delete_customer": "Trying to delete transaction customer",
+    "action_button_not_implement": "Action button not implemented"
+  }
+}

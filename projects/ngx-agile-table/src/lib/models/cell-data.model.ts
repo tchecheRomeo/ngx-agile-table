@@ -12,7 +12,7 @@ export class CellData {
     this.researchData = researchData || this.value;
     this.original = original;
   }
-  static valueOf(obj): CellData {
+  static valueOf(obj: any): CellData {
     const cellData = new CellData();
     if (obj) {
       if (obj.value !== null && obj.value !== undefined) {
