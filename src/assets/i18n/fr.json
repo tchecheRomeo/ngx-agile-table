@@ -1,0 +1,59 @@
+{
+   "text": {
+     "basic_usage": "Utilisation de base",
+     "students_list": "Liste des étudiants",
+     "full_customization": "CSS entièrement personnalisable",
+     "students_list_customized": "Liste des étudiants personnalisée",
+     "full_configurable": "Entrées entièrement configurables",
+     "column_filtering": "Filtrage des colonnes",
+     "column_sorting": "Tri des colonnes",
+     "local_pagination": "Pagination locale",
+     "element_per_page": "Élément par page",
+     "max_number_action_button_by_row": "Nombre maximum de boutons d'action par ligne",
+     "position_collapsed_action_button": "Positionner le bouton d'action réduit",
+     "default": "Par défaut",
+     "bottom": "En bas",
+     "right": "A Droite",
+     "lang": "Langue",
+     "fr": "Français",
+     "en": "Anglais",
+     "dangerous_transaction": "Transaction dangereuse (ligne rouge) avec un montant compris entre",
+     "submit_dangerous_transaction_with_enter": "(Appuyez sur 'Entrée' pour afficher les modifications)",
+     "transactions_list": "Liste des transactions",
+     "max_size": "Élément par page",
+     "total_elements": "Total des lignes",
+     "previous": "Précédent",
+     "next": "Suivant",
+     "empty_data": "Aucun contenu",
+     "female": "Femme",
+     "male": "Mâle"
+   },
+   "column": {
+     "first_name": "Prénom",
+     "last_name": "Nom de famille",
+     "age": "Âge",
+     "country": "Pays",
+     "first_po_box": "Première boîte postale",
+     "date": "Date",
+     "customer_name": "Nom du client",
+     "customer_gender": "Sexe du client",
+     "beneficiary_name": "Nom du bénéficiaire",
+     "amount": "Montant",
+     "fees": "Frais (montant de 20%)",
+     "status": "Statut"
+   },
+   "button": {
+     "delete": "Supprimer",
+     "valid": "Valider",
+     "reject": "Rejeter",
+     "edit": "Modifier",
+     "see": "Voir",
+     "retry": "Réessayer",
+     "cancel": "Annuler"
+   },
+   "alert": {
+     "edit_customer": "Essai de modification de la transaction du client",
+     "delete_customer": "Essai de suppression du client de transaction",
+     "action_button_not_implement": "Bouton d'action non implémenté"
+   }
+}

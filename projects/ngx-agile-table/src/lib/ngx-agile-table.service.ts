@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import {DomSanitizer} from "@angular/platform-browser";
+import {DomSanitizer} from '@angular/platform-browser';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NgxAgileTableService {
 
   static sanitizer: DomSanitizer;
@@ -13,6 +11,6 @@ export class NgxAgileTableService {
   }
 
   static getSanitizer(): DomSanitizer {
-    return this.sanitizer;
+    return NgxAgileTableService.sanitizer;
   }
 }

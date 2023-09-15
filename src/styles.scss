@@ -1,1 +1,86 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+
+.edit-bg, .green-bg, .delete-bg, .red-bg {
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    border-radius: 3px;
+  }
+  
+  .edit-bg:hover {
+    background-color: #1496bb;
+  }
+  
+  .edit-bg {
+    background-color: #4f197e;
+  }
+  
+  .green-bg {
+    background-color: green;
+  }
+  
+  .delete-bg, .red-bg {
+    background-color: red;
+  }
+  
+  .row-danger, .row-danger:hover {
+    background-color: #ff000075 !important;
+  }
+  
+  .row-danger td {
+    border: none !important;;
+  }
+  
+  .customization .ngx-table {
+    table {
+      border-bottom: 5px solid #01987a;
+      background-color: #01987a !important;
+      border-radius: 10px 10px 0 0 !important;
+    }
+  
+    table tbody {
+      background-color: white !important;
+    }
+  
+    table th {
+      border: none !important;
+      background-color: #01987a !important;
+      color: white !important;
+    }
+  
+    table th:first-child {
+      border-radius: 10px 0 0 0 !important;
+    }
+  
+    table th:last-child {
+      border-radius: 0 10px 0 0 !important;
+    }
+  
+    table tbody .table-mark {
+      color: #01987a !important;
+      background-color: #01987a1a !important;
+      border-bottom: 1px solid #01987a1a !important;
+      border-top: 1px solid #01987a1a !important;
+    }
+    table tr:hover {
+      background-color: #01987a1a !important;
+    }
+  
+    table input {
+      border-radius: 30px !important;
+      border: 1px solid white !important;
+      padding: 4px !important;
+      outline: none !important;
+    }
+  
+    table .table-no-content {
+      background-color: #01987a1a !important;
+      color: #01987a !important;
+    }
+  
+    table tbody td {
+      border: none !important;
+    }
+  }
+  

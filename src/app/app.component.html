@@ -1,23 +1,125 @@
-<p>
-  La table devrait être...
-</p>
+<h1>
+  {{'text.basic_usage' | translate }}
+</h1>
+
+<p>{{'text.students_list' | translate }}</p>
 
 <ngx-table
-  [actionButtons]="buttons"
-  [columnSettings]="columns"
+  [columnSettings]="customerColumns"
   [data]="customers"
-  [enableColumnSorting]="false"
-  [enableColumnFiltering]="false"
-  [localPagination]="true"
-  [elementPerPage]="elementPerPage"
-  [elementPerPageList]="elementPerPageList"
-  (onClickActionButton)="onActionButtonClicked($event)"
-
+  [emptyText]="'text.empty_data'"
 >
 
 </ngx-table>
 
-<p>
-  ... entre ça.
-</p>
-<!--<router-outlet></router-outlet>-->
+<h1>
+  {{'text.full_customization' | translate }}
+</h1>
+
+<p>{{'text.students_list_customized' | translate }}</p>
+
+<div class="customization">
+  <ngx-table
+    [columnSettings]="customerColumns"
+    [data]="customers"
+    [emptyText]="'text.empty_data'"
+  >
+
+  </ngx-table>
+</div>
+
+
+<h1>
+  {{'text.full_configurable' | translate }}
+</h1>
+
+<table>
+  <tbody>
+  <tr>
+    <td>{{'text.column_filtering' | translate }}</td>
+    <td>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="enableColumnFiltering">
+        <span class="slider round"></span>
+      </label>
+    </td>
+    <td>{{'text.column_sorting' | translate }}</td>
+    <td>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="enableColumnSorting">
+        <span class="slider round"></span>
+      </label>
+    </td>
+  </tr>
+  <tr>
+    <td>{{'text.local_pagination' | translate }}</td>
+    <td>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="localPagination">
+        <span class="slider round"></span>
+      </label>
+    </td>
+    <td>{{'text.element_per_page' | translate }} : </td>
+    <td>
+        <input type="number" [(ngModel)]="elementPerPage" [disabled]="!localPagination">
+    </td>
+  </tr>
+  <tr>
+    <td>{{'text.max_number_action_button_by_row' | translate }} : </td>
+    <td>
+        <input type="number" [(ngModel)]="maxActionButtonPerRow">
+    </td>
+    <td>{{'text.position_collapsed_action_button' | translate }}</td>
+    <td>
+        <select [(ngModel)]="collapseButtonPosition">
+          <option value="default">{{'text.default' | translate }}</option>
+          <option value="bottom">{{'text.bottom' | translate }}</option>
+          <option value="right">{{'text.right' | translate }}</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>{{'text.dangerous_transaction' | translate }} : </td>
+    <td>
+        <input type="number" [(ngModel)]="dangerousAmountMin" (keyup.enter)="transactions = [].concat(transactions)">
+    </td>
+    <td>
+        <input type="number" [(ngModel)]="dangerousAmountMax" (keyup.enter)="transactions = [].concat(transactions)">
+    </td>
+    <td>{{'text.submit_dangerous_transaction_with_enter' | translate }}</td>
+  </tr>
+  <tr>
+    <td>{{'text.lang' | translate }}</td>
+    <td>
+        <select [(ngModel)]="lang" (change)="changeLanguage()">
+          <option value="fr">{{'text.fr' | translate }}</option>
+          <option value="en">{{'text.en' | translate }}</option>
+        </select>
+    </td>
+  </tr>
+
+  </tbody>
+</table>
+
+<p>{{'text.transactions_list' | translate }}</p>
+<ngx-table
+  [actionButtons]="actionButtons"
+  [collapseActionButtonPosition]="collapseButtonPosition"
+  [maxActionButtonPerRow]="maxActionButtonPerRow"
+  [columnSettings]="transactionColumns"
+  [data]="transactions"
+  [enableColumnSorting]="enableColumnSorting"
+  [enableColumnFiltering]="enableColumnFiltering"
+  [localPagination]="localPagination"
+  [elementPerPage]="elementPerPage"
+  [elementPerPageList]="elementPerPageList"
+  (onClickActionButton)="onActionButtonClicked($event)"
+  (onRowDisplayed)="onRowDisplayed($event)"
+  [emptyText]="'text.empty_data'"
+  [maxSizeText]="'text.max_size'"
+  [totalElementsText]="'text.total_elements'"
+  [paginationPreviousText]="'text.previous'"
+  [paginationNextText]="'text.next'"
+>
+
+</ngx-table>

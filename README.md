@@ -6,29 +6,33 @@ Ngx-agile-table is a library that has been designed to allow you to quickly disp
 
 ## Demo
 
-See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table). 
+See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table-angular). 
 
 
 ## Versions
 
-|Angular| ngx-agile-table |
-|--|--|
-| >=13.0.0 | v1.x |
+|Angular| ngx-agile-table| Translate Module |
+|--|--|--|
+| >=8.0.0 | v0.8.1 & v0.8.2 | NO |
+| >=8.0.0 | v0.8.3 | YES |
+| >=13.0.0 | < v1.0.4 | NO |
+| >=13.0.0 | v1.x | YES |
 
 ## Installation
 
 The library is available as npm package, so all you need to do is to run the following command
 
 ```bash
-  npm install --save ngx-agile-table
+  npm install --save @ngx-translate/core@14.0.0 @ngx-translate/http-loader@7.0.0 ngx-agile-table@v1.0.5
 ```
 ## Minimal Setup Example
 
  Import the ngx-agile-table directives into your component.
  ```bash
   import {NgxAgileTableModule} from "ngx-agile-table";
+  import {TranslateModule} from '@ngx-translate/core';
 ```
-Add module **NgxAgileTableModule** into your module.ts
+Add module **NgxAgileTableModule** and **TranslateModule** into your module.ts
 
 ```bash
 // ...
@@ -38,6 +42,7 @@ Add module **NgxAgileTableModule** into your module.ts
     // ...
     
     NgxAgileTableModule,
+    TranslateModule.forRoot(),
     
     // ...
   ],
@@ -104,7 +109,7 @@ Finally, use **ngx-table** tag to display your data in html file or in template 
 <ngx-table [columnSettings]="columns" [data]="customers"></ngx-table>
 ```
 
-Save all files or start angular server using commande below
+Save all files or start angular server using command below
 ```bash
 ng serve --open
 ```
@@ -123,6 +128,9 @@ Well done !!!
 | enableColumnSorting | boolean | true | Enable/disable column sorting |
 | actionButtons | ActionButtonTable[] | [ ] | Action button(s) details to be displayed at the beginning of each line |
 | actionButtonTitle | string | <empty string> | Title of the action button column. |
+| collapseActionButton | ActionButtonTable | '...' button | Display button to tell the user that there are other action buttons |
+| maxActionButtonPerRow | number | 3 | Max action button(s) to be displayed at the beginning of each line |
+| collapseActionButtonPosition | string | right | Allows you to orient the drop-down list of hidden action buttons to the right or to the bottom. |
 | localPagination | boolean | false | Enable/disable library support for paging |
 | totalElements | number | 0 | Total data elements |
 | totalElementsText | string | Total Elements | Total element text to diplay
@@ -156,12 +164,29 @@ Well done !!!
 | display | boolean | Toggle the display of columns according to your needs (example: display of a column according to the role of a user) |
 | width | string | The width of the column. Don't forget the unit: px, rem, etc. |
 
+| Method | Parameter type | Description |
+|    --    |  --  |      --     |
+| customCell | (cellData: any, data?: any) => CellData or string | Define a custom cell to display. You can return html according your need. |
+
+**CellData Object**
+
+| Property | Type | Description |
+|    --    |  --  |      --     |
+| value | string | The data that will be displayed. |
+| researchData | string | The data to use to arrange or filter the column. |
+| original | any | The original or raw data. |
+
+| Method | Parameter type | Description |
+|    --    |  --  |      --     |
+| valueOf | (obj: any) => CellData | Transform an Object to CellData Object. |
+
 **ActionButtonTable Object**
 
 | Property | Type | Description |
 |    --    |  --  |      --     |
 | key | string | The unique key to distinct each action button |
-| icon | string | The button image or a style class (fa fa-users) |
+| html | string | The button html to display |
+| icon | string | The button image or a style class (fa fa-users) if no html define |
 | text | string | The button text to display if no icon define |
 | tooltip | string | Text to display when mouse over button. Defaults to the value of the text property. |
 | targetData | any | The element where the action button is located |

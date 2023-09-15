@@ -20,10 +20,10 @@
   }
 
   .table-input {
-    width: 95% !important;
+    width: 95%;
     line-height: normal;
-    padding: 0 0 0 2px !important;
-    font-weight: 400 !important;
+    padding: 0 0 0 2px;
+    font-weight: 400;
     height: 30px;
     margin-top: 4px;
   }
@@ -71,10 +71,68 @@
   }
 
   .action-button img {
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
     border-radius: 30px;
     padding: 6px;
+  }
+
+  .collapse-action-button, .collapse-container {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .collapse-action-button li .collapse-button:hover {
+    background-color: #faf5ff;
+  }
+
+  .collapse-action-button li .collapse-button {
+    padding: .25rem 1rem;
+    display: block;
+  }
+
+  .collapse-action-button .collapse-container {
+    display: none;
+  }
+
+  .collapse-container {
+    position: absolute;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: .25rem;
+  }
+
+  .collapse-action-button li:hover .collapse-right { /* Display the dropdown on hover */
+    display: flex !important;
+  }
+
+  .collapse-action-button li:hover .collapse-bottom { /* Display the dropdown on hover */
+    display: block !important;
+  }
+
+  .collapse-right {
+    max-width: 20rem;
+    overflow-x: auto;
+    margin-top: -1.3rem;
+  }
+
+  .collapse-bottom {
+    max-height: 20rem;
+    overflow-y: auto;
+    margin-top: -1.3rem;
+  }
+
+  .p-1 {
+    padding: .25rem !important;
+  }
+
+  .p-2 {
+    padding: .5rem !important;
+  }
+
+  .p-3 {
+    padding: 1rem !important;
   }
 
   .m-1 {
@@ -82,7 +140,7 @@
   }
 
   .m-2 {
-
+    margin: .5rem !important;
   }
 
   .m-3 {
@@ -139,12 +197,16 @@ table thead th {
   color: black;
 }
 
-table td {
+table td .cell-content {
   max-width: 250px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding: .5em 1em;
+}
+
+table td .action-button {
+  padding: .5rem 1rem;
 }
 
 table tr {
@@ -153,14 +215,14 @@ table tr {
 }
 
 table {
-  background-color: #fff !important;
-  margin-bottom: 0 !important;
+  background-color: #fff;
+  margin-bottom: 0;
   border-collapse: collapse;
   width: 100%;
 
   thead tr {
     color: #2d2d2d;
-    background-color: #dee0e4 !important;
+    background-color: #dee0e4;
     font-weight: bold;
   }
 }
@@ -171,8 +233,8 @@ table th, table td {
 }
 
 td {
-  font-weight: 400 !important;
-  font-size: 14px !important;
+  font-weight: 400;
+  font-size: 14px;
 }
 
 .table-pagination {

@@ -1,70 +1,112 @@
 <div class="ngx-table">
   <div class="flex-end mt-3 mb-2">
     <input *ngIf="displayGlobalSearchInput" id="search" type="text"
-           [(ngModel)]="globalSearchKeywords" placeholder="{{searchText}}"
+           [(ngModel)]="globalSearchKeywords" placeholder="{{searchText | translate}}"
            (keyup.enter)="globalSearchRequest()">
   </div>
 
   <div>
     <div>
-      <div [ngClass]="actionButtons.length != 0 ? 'responsive' : ''">
+      <div [ngClass]="actionButtons && actionButtons.length != 0 ? 'responsive' : ''">
 
         <table class="table-border table-hover" *ngIf="columnSettings">
 
           <thead>
 
-          <th *ngIf="actionButtons.length != 0">
-            {{actionButtonTitle}}
+          <th *ngIf="actionButtons && actionButtons.length != 0">
+            {{actionButtonTitle | translate}}
           </th>
           <ng-container *ngFor="let column of columnSettings; let i=index">
             <th *ngIf="column.display" [ngStyle]="column.width ? {'width': column.width} : {}">
               <div class="w-100 text-center"
-                   title="{{column.title}}">
+                   title="{{column.title | translate}}">
                 <input class="column-direction" #sortColumnDirection type="checkbox" hidden/>
-                <strong *ngIf="!enableColumnSorting">{{column.title}}</strong>
+                <strong *ngIf="!enableColumnSorting">{{column.title | translate}}</strong>
                 <strong *ngIf="enableColumnSorting" class="sort"
-                        (click)="sortByColumn(column.nameProperty, sortColumnDirection)">
-                  {{column.title}}
+                        (click)="sortByColumn(column, sortColumnDirection)">
+                  {{column.title | translate}}
                 </strong>
               </div>
-              <input *ngIf="enableColumnFiltering" class="column-key-search" #filterKeyword class="table-input" type="text"
-                     placeholder="{{column.title}}"
-                     (keyup)="filterTable(column.nameProperty, filterKeyword)"/>
+              <input *ngIf="enableColumnFiltering" class="column-key-search" #filterKeyword class="table-input"
+                     type="text"
+                     placeholder="{{column.title | translate}}"
+                     (keyup)="filterTable(column, filterKeyword.value)"/>
             </th>
           </ng-container>
           </thead>
           <tbody [ngStyle]="height.length != 0 ? {'max-height': height} : {}">
-          <tr *ngFor="let data of dataToDisplay; let i=index"
-              [ngClass]="colorVariationLineBreak !== 0 && (i + 1) % colorVariationLineBreak == 0 ? 'table-mark' : ''">
-            <td *ngIf="actionButtons.length != 0">
+          <tr *ngFor="let row of rowsToDisplay; let i=index"
+              [ngClass]="colorVariationLineBreak !== 0 && (i + 1) % colorVariationLineBreak == 0 ? 'table-mark' : ''" #nativeElement>
+            {{ rowDisplayed(row.data, nativeElement)}}
+
+            <td *ngIf="actionButtons && actionButtons.length != 0">
               <div class="flex-center">
-                <ng-container *ngFor="let actionButton of actionButtons">
-                  <!--{{buttonType(actionButton)}}-->
-                  <div class="action-button action-button-margin"
-                       *ngIf="displayButton(actionButton, i)" title="{{actionButton.tooltip}}"
+                <ng-container *ngFor="let actionButton of row.actionButtons">
+                  <div class="action-button action-button-margin" title="{{actionButton.tooltip | translate}}"
                        (click)="onActionButtonClicked(actionButton, i)">
-                    <ng-container *ngIf="actionButton.icon.length != 0">
+                    <div *ngIf="actionButton.html.length != 0" [innerHtml]="sanitize(actionButton.html)"></div>
+
+                    <ng-container *ngIf="actionButton.html.length == 0 && actionButton.icon.length != 0">
                       <img *ngIf="actionButton.icon.includes('/')" [src]="actionButton.icon"
-                           alt="{{actionButton.tooltip}}">
+                           alt="{{actionButton.tooltip | translate}}">
                       <i *ngIf="!actionButton.icon.includes('/')" class="{{actionButton.icon}}"></i>
                     </ng-container>
 
-                    <a *ngIf="actionButton.icon.length == 0">{{actionButton.text}}</a>
+                    <a *ngIf="actionButton.html.length == 0 && actionButton.icon.length == 0">
+                      {{actionButton.text | translate}}
+                    </a>
 
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="row.collapsedActionButtons.length !== 0">
+                  <div class="action-button action-button-margin" title="{{collapseActionButton.tooltip | translate}}">
+                    <ul class="collapse-action-button">
+                      <li>
+                        <div *ngIf="collapseActionButton.html.length != 0" [innerHtml]="sanitize(collapseActionButton.html)"></div>
+
+                        <ng-container *ngIf="collapseActionButton.html.length == 0 && collapseActionButton.icon.length != 0">
+                          <img *ngIf="collapseActionButton.icon.includes('/')" [src]="collapseActionButton.icon"
+                               alt="{{collapseActionButton.tooltip | translate}}">
+                          <i *ngIf="!collapseActionButton.icon.includes('/')" class="{{collapseActionButton.icon}}"></i>
+                        </ng-container>
+
+                        <a *ngIf="collapseActionButton.html.length == 0 && collapseActionButton.icon.length == 0">
+                          {{collapseActionButton.text | translate}}
+                        </a>
+                        <ul class="collapse-container {{ getCollapsePosition() }}">
+                          <li *ngFor="let collapsedButton of row.collapsedActionButtons">
+                            <div class="collapse-button" title="{{collapsedButton.tooltip | translate}}"
+                                 (click)="onActionButtonClicked(collapsedButton, i)">
+                              <div *ngIf="collapsedButton.html.length != 0" [innerHtml]="sanitize(collapsedButton.html)"></div>
+
+                              <ng-container *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length != 0">
+                                <img *ngIf="collapsedButton.icon.includes('/')" [src]="collapsedButton.icon"
+                                     alt="{{collapsedButton.tooltip | translate}}">
+                                <i *ngIf="!collapsedButton.icon.includes('/')" class="{{collapsedButton.icon}}"></i>
+                              </ng-container>
+
+                              <a *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length == 0">{{collapsedButton.text | translate}}</a>
+
+                            </div>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
                   </div>
                 </ng-container>
               </div>
             </td>
+
             <ng-container *ngFor="let column of columnSettings; let i=index">
               <td *ngIf="column.display"
-                  title="{{tableDataTitleAttribute(data,column.nameProperty)}}">
-                <div [innerHtml]="columnValue(data,column.nameProperty)"></div>
+                  title="{{tableDataTitleAttribute(row.data,column)}}">
+                <div class="cell-content" [innerHtml]="columnDisplayValue(row.data,column)"></div>
               </td>
             </ng-container>
           </tr>
-          <tr *ngIf="dataToDisplay.length === 0">
-            <td [attr.colspan]="actionButtons.length != 0 ? columnSettings.length + 1 : columnSettings.length">
-              {{emptyText}}
+          <tr *ngIf="rowsToDisplay.length === 0" class="table-no-content">
+            <td [attr.colspan]="actionButtons && actionButtons.length != 0 ? columnSettings.length + 1 : columnSettings.length">
+              {{emptyText | translate}}
             </td>
           </tr>
           </tbody>
@@ -73,12 +115,12 @@
     </div>
     <div class="table-footer">
       <div class="flex-between m-3"
-           *ngIf="totalPages && totalElements && totalElements !== elementPerPage">
+           *ngIf="totalPages && totalElements &&  elementPerPageList &&  elementPerPageList.length !=0 && totalElements > elementPerPageList[0]">
         <div *ngIf="totalElementsText.length !== 0">
-          {{totalElementsText}}: {{dataToDisplay.length !== 0 ? totalElements : 0}}
+          {{totalElementsText | translate}}: {{rowsToDisplay.length !== 0 ? (rowsToDisplay.length + '/' + totalElements) : 0}}
         </div>
         <div class="flex mt-2 mb-2">
-          <div class="mr-1 size" *ngIf="maxSizeText.length !== 0">{{maxSizeText}}:</div>
+          <div class="mr-1 size" *ngIf="maxSizeText.length !== 0">{{maxSizeText | translate}}:</div>
           <select [(ngModel)]="elementPerPage" (change)="onElementPerPageChange()">
             <option *ngFor="let element of elementPerPageList">{{element}}</option>
           </select>
@@ -91,7 +133,7 @@
                     <i *ngIf="!paginationPreviousIcon.includes('/')" class="{{paginationPreviousIcon}}"></i>
                   </ng-container>
                   <ng-container *ngIf="paginationPreviousIcon.length === 0">
-                    {{paginationPreviousText}}
+                    {{paginationPreviousText | translate}}
                   </ng-container>
                 </a>
               </li>
@@ -106,7 +148,7 @@
                     <i *ngIf="!paginationNextIcon.includes('/')" class="{{paginationNextIcon}}"></i>
                   </ng-container>
                   <ng-container *ngIf="paginationNextIcon.length === 0">
-                    {{paginationNextText}}
+                    {{paginationNextText | translate}}
                   </ng-container>
                 </a>
               </li>
@@ -118,13 +160,3 @@
   </div>
   <div style="margin: 0; opacity: 0;height: 0;width: 0;">Built with love by Klaus Laghom and Romeo Njinang</div>
 </div>
-<!--<div class="flex">
-  <button type="button" mdbBtn class="relative waves-light mr-3"  style="background-color:#002D66;padding: 8px 10px; font-size:12px;" (click)="create()"  *ngIf="showCreateButton" mdbWavesEffect>
-   <i class="fa fa-plus mr-1"> </i> Ajouter
-</button>
-
-<button type="button" mdbBtn class="relative waves-light"  style="background-color:#C32207;padding: 8px 10px; font-size:12px;" (click)="export()" *ngIf="showExportButton" mdbWavesEffect>
-  <i class="fa fa-download mr-1"></i> Exporter
-</button>
-
-</div>-->
