@@ -1,6 +1,6 @@
 {
   "name": "ngx-table-samples",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -23,7 +23,6 @@
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
-  
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~13.3.3",
