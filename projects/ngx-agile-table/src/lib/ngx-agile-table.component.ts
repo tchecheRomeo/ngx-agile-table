@@ -240,7 +240,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     if (changes.totalElementsText) {
       this.totalElementsText = changes.totalElementsText.currentValue;
     }
-    if (this.elementPerPageList) {
+    if (this.elementPerPageList && this.elementPerPage) {
       if (this.elementPerPageList.length === 0) {
         this.elementPerPageList = [this.elementPerPage, 20, 50, 100, 200];
       }

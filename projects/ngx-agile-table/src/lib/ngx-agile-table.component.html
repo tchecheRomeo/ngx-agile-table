@@ -115,7 +115,7 @@
     </div>
     <div class="table-footer">
       <div class="flex-between m-3"
-           *ngIf="totalPages && totalElements && totalElements !== elementPerPage">
+         *ngIf="totalPages && totalElements &&  elementPerPageList &&  elementPerPageList.length !=0 && totalElements > elementPerPageList[0]">
         <div *ngIf="totalElementsText.length !== 0">
           {{totalElementsText | translate}}: {{rowsToDisplay.length !== 0 ? (rowsToDisplay.length + '/' + totalElements) : 0}}
         </div>
