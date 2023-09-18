@@ -154,20 +154,17 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
       row.actionButtons = [];
       row.collapsedActionButtons = [];
 
-      if (this.actionButtons.length <= this.maxActionButtonPerRow) {
-        row.actionButtons = row.actionButtons.concat(this.actionButtons);
-      } else {
-        for (const actionButton of this.actionButtons) {
-          canDisplayButton = actionButton.displayConditionFn(
-            this.data.find(d => JSON.stringify(dt) === JSON.stringify(d))
-          );
+      for (const actionButton of this.actionButtons) {
+        canDisplayButton = actionButton.displayConditionFn(
+          this.data.find(d => JSON.stringify(dt) === JSON.stringify(d))
+        );
 
-          if (canDisplayButton) {
-            if (row.actionButtons.length < this.maxActionButtonPerRow - 1) { // -1 for collapse button
-              row.actionButtons.push(actionButton);
-            } else {
-              row.collapsedActionButtons.push(actionButton);
-            }
+        if (canDisplayButton) {
+          if ( this.actionButtons.length <= this.maxActionButtonPerRow || 
+               row.actionButtons.length < this.maxActionButtonPerRow - 1) { // -1 for collapse button
+            row.actionButtons.push(actionButton);
+          } else {
+            row.collapsedActionButtons.push(actionButton);
           }
         }
         if (row.collapsedActionButtons.length !== 0 &&
@@ -176,7 +173,6 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
           row.collapsedActionButtons = [];
         }
       }
-
       rows.push(row);
     }
     this.rows = rows;
