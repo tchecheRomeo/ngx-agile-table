@@ -6,7 +6,7 @@ Ngx-agile-table is a library that has been designed to allow you to quickly disp
 
 ## Demo
 
-See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table-angular). 
+See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table). 
 
 
 ## Versions
@@ -23,7 +23,7 @@ See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table-angular).
 The library is available as npm package, so all you need to do is to run the following command
 
 ```bash
-  npm install --save @ngx-translate/core@14.0.0 @ngx-translate/http-loader@7.0.0 ngx-agile-table@v1.0.5
+  npm install --save @ngx-translate/core@14.0.0 @ngx-translate/http-loader@7.0.0 ngx-agile-table@v1.0.7
 ```
 ## Minimal Setup Example
 
