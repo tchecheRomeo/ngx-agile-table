@@ -22,7 +22,8 @@ export class AppComponent implements OnInit {
   actionButtons: ActionButtonTable[] = [
     new ActionButtonTable('delete', 'button.delete')
       .displayCondition((data) => data.amount % 300 === 0)
-      .htmlValue('<img class="delete-bg" src="/assets/icons/trash.png" alt="Image">'),
+      .iconValue('/assets/icons/trash.png').cssValue('delete-bg'),
+    //  .htmlValue('<img class="delete-bg" src="/assets/icons/trash.png" alt="Image">'),
     new ActionButtonTable('valid', 'button.valid')
       .htmlValue('<img class="green-bg" src="/assets/icons/confirm.png" alt="Image">'),
     new ActionButtonTable('reject', 'button.reject')
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit {
       .htmlValue('<img class="edit-bg" src="/assets/icons/eyes.png" alt="Image">'),
     new ActionButtonTable('retry', 'button.retry'),
     new ActionButtonTable('cancel', 'button.cancel')
+   
   ];
 
   transactionColumns: ColumnTable[] = [
