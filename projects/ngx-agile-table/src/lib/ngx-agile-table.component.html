@@ -82,15 +82,17 @@
                           <li *ngFor="let collapsedButton of row.collapsedActionButtons">
                             <div class="collapse-button" title="{{collapsedButton.tooltip | translate}}"
                                  (click)="onActionButtonClicked(collapsedButton, i)">
-                              <div *ngIf="collapsedButton.html.length != 0" [innerHtml]="sanitize(collapsedButton.html)"></div>
+                              <div 
+                              class="{{getClass(collapsedButton)}}"
+                              *ngIf="collapsedButton.html.length != 0" [innerHtml]="sanitize(collapsedButton.html)"></div>
 
                               <ng-container *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length != 0">
-                                <img *ngIf="collapsedButton.icon.includes('/')" [src]="collapsedButton.icon"
+                                <img  class="{{getClass(collapsedButton)}}" *ngIf="collapsedButton.icon.includes('/')" [src]="collapsedButton.icon"
                                      alt="{{collapsedButton.tooltip | translate}}">
-                                <i *ngIf="!collapsedButton.icon.includes('/')" class="{{collapsedButton.icon}}"></i>
+                                <i *ngIf="!collapsedButton.icon.includes('/')" class="{{ getClass(collapsedButton)  + ' ' + collapsedButton.icon}}"></i>
                               </ng-container>
 
-                              <a *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length == 0">{{collapsedButton.text | translate}}</a>
+                              <a class="{{getClass(collapsedButton)}}" *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length == 0">{{collapsedButton.text | translate}}</a>
 
                             </div>
                           </li>

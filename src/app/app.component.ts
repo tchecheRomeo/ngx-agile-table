@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
   actionButtons: ActionButtonTable[] = [
     new ActionButtonTable('delete', 'button.delete')
       .displayCondition((data) => data.amount % 300 === 0)
-     // .htmlValue('<img class="delete-bg" src="/assets/icons/trash.png" alt="Image">'),
      .iconValue('/assets/icons/trash.png').cssValue('delete-bg'),
     new ActionButtonTable('valid', 'button.valid')
       .htmlValue('<img class="green-bg" src="/assets/icons/confirm.png" alt="Image">'),

@@ -14,7 +14,7 @@ See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table-angular-v
 |Angular| ngx-agile-table| Translate Module |
 |--|--|--|
 | >=8.0.0 | v0.8.1 & v0.8.2 | NO |
-| >=8.0.0 | v0.8.4 & v0.8.5 | YES |
+| >=8.0.0 | v0.8.4 to v0.8.6 | YES |
 | >=13.0.0 | v1.x | NO |
 
 ## Installation
