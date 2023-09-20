@@ -14,7 +14,7 @@ See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table-angular-v
 |Angular| ngx-agile-table| Translate Module |
 |--|--|--|
 | >=8.0.0 | v0.8.1 & v0.8.2 | NO |
-| >=8.0.0 | v0.8.3 | YES |
+| >=8.0.0 | v0.8.4 & v0.8.5 | YES |
 | >=13.0.0 | v1.x | NO |
 
 ## Installation
@@ -190,6 +190,7 @@ Well done !!!
 | tooltip | string | Text to display when mouse over button. Defaults to the value of the text property. |
 | targetData | any | The element where the action button is located |
 | target | number | Index of the selected element according to the array of input data. |
+| cssValue | string | Custom classes to the button. Classes are added to the button. To add multiple classes, the value should be space separated class names. |
 
 
 | Method | Parameter type | Description |

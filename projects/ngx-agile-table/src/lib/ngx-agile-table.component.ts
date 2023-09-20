@@ -525,4 +525,8 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     return '';
   }
 
+  getClass(actionButton:ActionButtonTable){
+    return actionButton.css.length != 0 && !actionButton.css.includes(':') ? actionButton.css: '';
+   }
+
 }

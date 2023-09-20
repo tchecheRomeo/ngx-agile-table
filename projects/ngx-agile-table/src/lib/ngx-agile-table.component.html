@@ -42,17 +42,22 @@
             <td *ngIf="actionButtons && actionButtons.length != 0">
               <div class="flex-center">
                 <ng-container *ngFor="let actionButton of row.actionButtons">
-                  <div class="action-button action-button-margin" title="{{actionButton.tooltip | translate}}"
+                  <div 
+                      class="action-button action-button-margin"
+                      title="{{actionButton.tooltip | translate}}"
                        (click)="onActionButtonClicked(actionButton, i)">
-                    <div *ngIf="actionButton.html.length != 0" [innerHtml]="sanitize(actionButton.html)"></div>
+
+                    <div 
+                    class="{{getClass(actionButton)}}"
+                    *ngIf="actionButton.html.length != 0" [innerHtml]="sanitize(actionButton.html)"></div>
 
                     <ng-container *ngIf="actionButton.html.length == 0 && actionButton.icon.length != 0">
-                      <img *ngIf="actionButton.icon.includes('/')" [src]="actionButton.icon"
+                      <img class="{{getClass(actionButton)}}" *ngIf="actionButton.icon.includes('/')" [src]="actionButton.icon"
                            alt="{{actionButton.tooltip | translate}}">
-                      <i *ngIf="!actionButton.icon.includes('/')" class="{{actionButton.icon}}"></i>
+                      <i *ngIf="!actionButton.icon.includes('/')" class="{{ getClass(actionButton)  + ' ' + actionButton.icon}}" style="color:red"></i>
                     </ng-container>
 
-                    <a *ngIf="actionButton.html.length == 0 && actionButton.icon.length == 0">
+                    <a class="{{getClass(actionButton)}}"  *ngIf="actionButton.html.length == 0 && actionButton.icon.length == 0">
                       {{actionButton.text | translate}}
                     </a>
 
