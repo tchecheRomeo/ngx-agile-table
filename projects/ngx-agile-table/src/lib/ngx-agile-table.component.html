@@ -1,8 +1,8 @@
 <div class="ngx-table">
   <div class="flex-end mt-3 mb-2">
     <input *ngIf="displayGlobalSearchInput" id="search" type="text"
-           [(ngModel)]="globalSearchKeywords" placeholder="{{searchText | translate}}"
-           (keyup.enter)="globalSearchRequest()">
+           #globalSearchKeywords placeholder="{{searchText | translate}}"
+           (keyup.enter)="globalSearchRequest(globalSearchKeywords.value)">
   </div>
 
   <div>
@@ -42,12 +42,12 @@
             <td *ngIf="actionButtons && actionButtons.length != 0">
               <div class="flex-center">
                 <ng-container *ngFor="let actionButton of row.actionButtons">
-                  <div 
+                  <div
                       class="action-button action-button-margin"
                       title="{{actionButton.tooltip | translate}}"
                        (click)="onActionButtonClicked(actionButton, i)">
 
-                    <div 
+                    <div
                     class="{{getClass(actionButton)}}"
                     *ngIf="actionButton.html.length != 0" [innerHtml]="sanitize(actionButton.html)"></div>
 
@@ -82,7 +82,7 @@
                           <li *ngFor="let collapsedButton of row.collapsedActionButtons">
                             <div class="collapse-button" title="{{collapsedButton.tooltip | translate}}"
                                  (click)="onActionButtonClicked(collapsedButton, i)">
-                              <div 
+                              <div
                               class="{{getClass(collapsedButton)}}"
                               *ngIf="collapsedButton.html.length != 0" [innerHtml]="sanitize(collapsedButton.html)"></div>
 
@@ -128,8 +128,8 @@
         </div>
         <div class="flex mt-2 mb-2">
           <div class="mr-1 size" *ngIf="maxSizeText.length !== 0">{{maxSizeText | translate}}:</div>
-          <select [(ngModel)]="elementPerPage" (change)="onElementPerPageChange()">
-            <option *ngFor="let element of elementPerPageList">{{element}}</option>
+          <select>
+            <option *ngFor="let element of elementPerPageList" (click)="onElementPerPageChange(element)">{{element}}</option>
           </select>
           <nav>
             <ul class="table-pagination justify-content-center">
@@ -145,7 +145,7 @@
                 </a>
               </li>
               <li class="table-page-item" *ngFor="let page of pages()"
-                  [ngClass]="page == pageSelected ? 'active' : ''">
+                  [ngClass]="page == currentPage ? 'active' : ''">
                 <a class="table-page-link" (click)="onPageChange(page)">{{page}}</a>
               </li>
               <li class="table-page-item" [ngClass]="pageStart + pagesRangeLimit - 1 >= totalPages ? 'disabled' : ''">

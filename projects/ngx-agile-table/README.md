@@ -14,7 +14,7 @@ See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table-angular-v
 |Angular| ngx-agile-table| Translate Module |
 |--|--|--|
 | >=8.0.0 | v0.8.1 & v0.8.2 | NO |
-| >=8.0.0 | v0.8.4 to v0.8.6 | YES |
+| >=8.0.0 | v0.8.4 to v0.8.x | YES |
 | >=13.0.0 | v1.x | NO |
 
 ## Installation
@@ -134,6 +134,7 @@ Well done !!!
 | totalElements | number | 0 | Total data elements |
 | totalElementsText | string | Total Elements | Total element text to diplay
 | totalPages | number | 0 | Total pages. Calculate automatically if local pagination enabled.
+| currentPage | number | 1 | Default active/current page
 | elementPerPage | number | 10 | Default element per page
 | elementPerPageList | number[] | [20, 50, 100, 200] | Element per page range |
 | displayGlobalSearchInput | boolean | false | show/hide global search input |
@@ -204,6 +205,7 @@ Well done !!!
 - Filtering
 - Sorting
 - Pagination
+- Translation
 - Easy customization
 
 

@@ -78,6 +78,9 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   totalPages: number = 0;
 
   @Input()
+  currentPage: number = 1;
+
+  @Input()
   elementPerPage: number;
 
   @Input()
@@ -107,12 +110,10 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   @Output()
   onRowDisplayed: EventEmitter<RowTable> = new EventEmitter();
 
-  pageSelected: number = 1;
   collapseActionButtonPositions: string[] = ['right', 'bottom'];
 
-  pagesRangeLimit = 5;
-  pageStart = 1;
-  globalSearchKeywords = '';
+  pagesRangeLimit: number = 5;
+  pageStart: number = 1;
 
   columnSearchKeyword = '';
   columnSearch: ColumnTable;
@@ -160,8 +161,8 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
         );
 
         if (canDisplayButton) {
-          if ( this.actionButtons.length <= this.maxActionButtonPerRow || 
-               row.actionButtons.length < this.maxActionButtonPerRow - 1) { // -1 for collapse button
+          if ( this.actionButtons.length <= this.maxActionButtonPerRow ||
+            row.actionButtons.length < this.maxActionButtonPerRow - 1) { // -1 for collapse button
             row.actionButtons.push(actionButton);
           } else {
             row.collapsedActionButtons.push(actionButton);
@@ -254,7 +255,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
 
     if (this.localPagination) {
       this.totalPageCalculation();
-      this.rowsToDisplay = this.segmentation(1);
+      this.rowsToDisplay = this.segmentation(this.currentPage);
     } else {
       this.rowsToDisplay = [].concat(this.rows);
     }
@@ -272,7 +273,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   }
 
   resetTotalPages(data?: any[]) {
-    this.pageSelected = 1;
+    this.currentPage = 1;
     this.pageStart = 1;
     if (this.localPagination) {
       this.totalPageCalculation(data);
@@ -317,8 +318,8 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     }
   }
 
-  globalSearchRequest() {
-    this.onGlobalSearchRequest.emit(this.globalSearchKeywords);
+  globalSearchRequest(globalSearchKeywords: string) {
+    this.onGlobalSearchRequest.emit(globalSearchKeywords);
   }
 
   onPageChange(page: number) {
@@ -333,10 +334,11 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     } else {
       this.onPageChanged.emit(page);
     }
-    this.pageSelected = page;
+    this.currentPage = page;
   }
 
-  onElementPerPageChange() {
+  onElementPerPageChange(element: number) {
+    this.elementPerPage = element;
     if (this.localPagination) {
       if (this.columnSearchKeyword && this.columnSearchKeyword !== '') {
         this.filterTable(this.columnSearch, this.columnSearchKeyword, 1);
@@ -525,8 +527,8 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     return '';
   }
 
-  getClass(actionButton:ActionButtonTable){
-    return actionButton.css.length != 0 && !actionButton.css.includes(':') ? actionButton.css: '';
+  getClass(actionButton: ActionButtonTable) {
+    return actionButton.css.length !== 0 && !actionButton.css.includes(':') ? actionButton.css : '';
    }
 
 }

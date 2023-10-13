@@ -12,7 +12,6 @@ import {TranslateModule} from '@ngx-translate/core';
     NgxAgileTableComponent
   ],
   imports: [
-    FormsModule,
     CommonModule,
     TranslateModule
   ],
