@@ -134,7 +134,6 @@
             "tsConfig": "projects/ngx-agile-table/tsconfig.spec.json",
             "karmaConfig": "projects/ngx-agile-table/karma.conf.js"
           }
-          
         }
       }
     }
