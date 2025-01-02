@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngx-table-samples:build:production"
+              "buildTarget": "ngx-table-samples:build:production"
             },
             "development": {
-              "browserTarget": "ngx-table-samples:build:development"
+              "buildTarget": "ngx-table-samples:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-table-samples:build"
+            "buildTarget": "ngx-table-samples:build"
           }
         },
         "test": {
@@ -138,5 +138,7 @@
       }
     }
   },
-  "defaultProject": "ngx-table-samples"
+  "cli": {
+    "analytics": false
+  }
 }
