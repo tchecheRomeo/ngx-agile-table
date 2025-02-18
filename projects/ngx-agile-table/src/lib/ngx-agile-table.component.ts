@@ -23,9 +23,10 @@ class Row {
 }
 
 @Component({
-  selector: 'ngx-table',
-  templateUrl: './ngx-agile-table.component.html',
-  styleUrls: ['./ngx-agile-table.component.scss']
+    selector: 'ngx-table',
+    templateUrl: './ngx-agile-table.component.html',
+    styleUrls: ['./ngx-agile-table.component.scss'],
+    standalone: false
 })
 export class NgxAgileTableComponent implements OnInit, OnChanges {
 
