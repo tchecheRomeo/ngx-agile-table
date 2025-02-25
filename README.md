@@ -1,6 +1,6 @@
 # NgxAgileTableV8
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
 
 # Install dependencies
 
@@ -25,6 +25,10 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Deploy to npm repository
+
+Go to  `dist/ngx-agile-table`. If you not logged to npm, use the following command `npm login`. After, use the next command to publish the package on npm repository `npm publish`.
 
 ## Further help
 
