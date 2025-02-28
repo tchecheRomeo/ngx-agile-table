@@ -25,7 +25,7 @@ See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table).
 The library is available as npm package, so all you need to do is to run the following command
 
 ```bash
-  npm install --save @ngx-translate/core@14.0.0 @ngx-translate/http-loader@7.0.0 ngx-agile-table@v3.0.0
+  npm install --save @ngx-translate/core@14.0.0 @ngx-translate/http-loader@7.0.0 ngx-agile-table@v2.9.0
 ```
 ## Minimal Setup Example
 
