@@ -17,6 +17,7 @@ See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table).
 | >=8.0.0 | v0.8.3 to v0.8.6 | YES |
 | >=13.0.0 | < v1.0.4 | NO |
 | >=13.0.0 | v1.x | YES |
+| >=18.0.0 | v2.9.0 | YES |
 | >=19.0.0 | v3.x | YES |
 
 ## Installation

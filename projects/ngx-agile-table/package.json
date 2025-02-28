@@ -14,8 +14,8 @@
   },
   "description": "Responsive and Reactive Table build with love using Angular",
   "peerDependencies": {
-    "@angular/common": "^19.0.5",
-    "@angular/core": "^19.0.5",
+    "@angular/common": "^18.2.13",
+    "@angular/core": "^18.2.13",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0"
   },
