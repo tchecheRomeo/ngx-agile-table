@@ -122,6 +122,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   columnSort: ColumnTable = new ColumnTable('');
   rows: Row[] = [];
   rowsToDisplay: Row[] = [];
+  columnFilterKeywordMap: Map<ColumnTable, string> = new Map();
 
   constructor() {
   }
@@ -161,7 +162,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
         );
 
         if (canDisplayButton) {
-          if ( this.actionButtons.length <= this.maxActionButtonPerRow || 
+          if ( this.actionButtons.length <= this.maxActionButtonPerRow ||
                row.actionButtons.length < this.maxActionButtonPerRow - 1) { // -1 for collapse button
             row.actionButtons.push(actionButton);
           } else {
@@ -355,9 +356,23 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
 
   filterTable(columnTable: ColumnTable, keyword: string, page?: number) {
     let searchResults: any[];
-    if (keyword && keyword !== '') {
-      searchResults = this.rows.filter(r => (this.cellDataValue(r.data, columnTable)
-        .researchData + '').toLowerCase().includes(keyword.toLowerCase()));
+    if (keyword && keyword.length > 0) {
+      this.columnFilterKeywordMap.set(columnTable, keyword);
+    } else {
+      if (this.columnFilterKeywordMap.has(columnTable)) {
+          this.columnFilterKeywordMap.delete(columnTable);
+      }
+    }
+
+    if(this.columnFilterKeywordMap.size !== 0) {
+      searchResults = this.rows.filter(r => {
+          let matched: boolean = true;
+          for (const [column, word] of this.columnFilterKeywordMap) {
+              matched = matched && (this.cellDataValue(r.data, column)
+                .researchData + '').toLowerCase().includes(word.toLowerCase());
+          }
+          return matched;
+      });
     } else {
       searchResults = this.rows;
     }
@@ -367,13 +382,16 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
 
     this.columnSearchKeyword = keyword;
     this.columnSearch = columnTable;
+    if(this.columnSort) {
+      this.sortDataDisplay(this.columnSort, this.columnSortDirectionAsc, page);
+    }
   }
 
   sortDataDisplay(columnTable: ColumnTable, ascFiltering: boolean, page?: number) {
     let searchResults: any[];
 
     if (ascFiltering) {
-      searchResults = this.rows.sort((a, b) => {
+      searchResults = this.rowsToDisplay.sort((a, b) => {
         let value: any = this.cellDataValue(a.data, columnTable).researchData;
         let value2: any = this.cellDataValue(b.data, columnTable).researchData;
         value = parseFloat(value) ? parseFloat(value) : value;
@@ -388,7 +406,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
         return 0;
       });
     } else {
-      searchResults = this.rows.sort((a, b) => {
+      searchResults = this.rowsToDisplay.sort((a, b) => {
         let value: any = this.cellDataValue(a.data, columnTable).researchData;
         let value2: any = this.cellDataValue(b.data, columnTable).researchData;
         value = parseFloat(value) ? parseFloat(value) : value;
