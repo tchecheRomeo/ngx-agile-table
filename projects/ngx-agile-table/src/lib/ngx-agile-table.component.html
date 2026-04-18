@@ -1,166 +1,220 @@
 <div class="ngx-table">
   <div class="flex-end mt-3 mb-2">
-    <input *ngIf="displayGlobalSearchInput" id="search" type="text"
-           [(ngModel)]="globalSearchKeywords" placeholder="{{searchText | translate}}"
-           (keyup.enter)="globalSearchRequest()">
+    @if (displayGlobalSearchInput) {
+      <input id="search" type="text"
+        [(ngModel)]="globalSearchKeywords" placeholder="{{searchText | translate}}"
+        (keyup.enter)="globalSearchRequest()">
+    }
   </div>
 
   <div>
     <div>
       <div [ngClass]="actionButtons && actionButtons.length != 0 ? 'responsive' : ''">
 
-        <table class="table-border table-hover" *ngIf="columnSettings">
-
-          <thead>
-
-          <th *ngIf="actionButtons && actionButtons.length != 0">
-            {{actionButtonTitle | translate}}
-          </th>
-          <ng-container *ngFor="let column of columnSettings; let i=index">
-            <th *ngIf="column.display" [ngStyle]="column.width ? {'width': column.width} : {}">
-              <div class="w-100 text-center"
-                   title="{{column.title | translate}}">
-                <input class="column-direction" #sortColumnDirection type="checkbox" hidden/>
-                <strong *ngIf="!enableColumnSorting">{{column.title | translate}}</strong>
-                <strong *ngIf="enableColumnSorting" class="sort"
-                        (click)="sortByColumn(column, sortColumnDirection)">
-                  {{column.title | translate}}
-                </strong>
-              </div>
-              <input *ngIf="enableColumnFiltering" class="column-key-search" #filterKeyword class="table-input"
-                     type="text"
-                     placeholder="{{column.title | translate}}"
-                     (keyup)="filterTable(column, filterKeyword.value)"/>
-            </th>
-          </ng-container>
-          </thead>
-          <tbody [ngStyle]="height.length != 0 ? {'max-height': height} : {}">
-          <tr *ngFor="let row of rowsToDisplay; let i=index"
-              [ngClass]="colorVariationLineBreak !== 0 && (i + 1) % colorVariationLineBreak == 0 ? 'table-mark' : ''" #nativeElement>
-            {{ rowDisplayed(row.data, nativeElement)}}
-
-            <td *ngIf="actionButtons && actionButtons.length != 0">
-              <div class="flex-center">
-                <ng-container *ngFor="let actionButton of row.actionButtons">
-                  <div class="action-button action-button-margin" title="{{actionButton.tooltip | translate}}"
-                       (click)="onActionButtonClicked(actionButton, i)">
-                    <div 
-                    class="{{getClass(actionButton)}}"
-                    *ngIf="actionButton.html.length != 0" [innerHtml]="sanitize(actionButton.html)"></div>
-
-                    <ng-container *ngIf="actionButton.html.length == 0 && actionButton.icon.length != 0">
-                      <img  class="{{getClass(actionButton)}}" *ngIf="actionButton.icon.includes('/')" [src]="actionButton.icon"
-                           alt="{{actionButton.tooltip | translate}}">
-                      <i *ngIf="!actionButton.icon.includes('/')" class="{{  getClass(actionButton)  + ' ' + actionButton.icon}}"></i>
-                    </ng-container>
-
-                    <a  class="{{getClass(actionButton)}}" *ngIf="actionButton.html.length == 0 && actionButton.icon.length == 0">
-                      {{actionButton.text | translate}}
-                    </a>
-
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="row.collapsedActionButtons.length !== 0">
-                  <div  class="action-button action-button-margin" title="{{collapseActionButton.tooltip | translate}}">
-                    <ul class="collapse-action-button">
-                      <li>
-                        <div 
-                         *ngIf="collapseActionButton.html.length != 0" [innerHtml]="sanitize(collapseActionButton.html)"></div>
-
-                        <ng-container *ngIf="collapseActionButton.html.length == 0 && collapseActionButton.icon.length != 0">
-                          <img  *ngIf="collapseActionButton.icon.includes('/')" [src]="collapseActionButton.icon"
-                               alt="{{collapseActionButton.tooltip | translate}}">
-                          <i *ngIf="!collapseActionButton.icon.includes('/')" class="{{collapseActionButton.icon}}"></i>
-                        </ng-container>
-
-                        <a *ngIf="collapseActionButton.html.length == 0 && collapseActionButton.icon.length == 0">
-                          {{collapseActionButton.text | translate}}
-                        </a>
-                        <ul class="collapse-container {{ getCollapsePosition() }}">
-                          <li *ngFor="let collapsedButton of row.collapsedActionButtons">
-                            <div 
-                               class="{{getClass(collapsedButton)}}"
-                               class="collapse-button" title="{{collapsedButton.tooltip | translate}}"
-                                 (click)="onActionButtonClicked(collapsedButton, i)">
-                              <div  class="{{getClass(collapsedButton)}}" *ngIf="collapsedButton.html.length != 0" [innerHtml]="sanitize(collapsedButton.html)"></div>
-
-                              <ng-container *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length != 0">
-                                <img *ngIf="collapsedButton.icon.includes('/')" [src]="collapsedButton.icon"
-                                     alt="{{collapsedButton.tooltip | translate}}">
-                                <i *ngIf="!collapsedButton.icon.includes('/')" class="{{  getClass(collapsedButton)  + ' ' + collapsedButton.icon}}"></i>
-                              </ng-container>
-
-                              <a class="{{getClass(collapsedButton)}}" *ngIf="collapsedButton.html.length == 0 && collapsedButton.icon.length == 0">{{collapsedButton.text | translate}}</a>
-
-                            </div>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </div>
-                </ng-container>
-              </div>
-            </td>
-
-            <ng-container *ngFor="let column of columnSettings; let i=index">
-              <td *ngIf="column.display"
-                  title="{{tableDataTitleAttribute(row.data,column)}}">
-                <div class="cell-content" [innerHtml]="columnDisplayValue(row.data,column)"></div>
-              </td>
-            </ng-container>
-          </tr>
-          <tr *ngIf="rowsToDisplay.length === 0" class="table-no-content">
-            <td [attr.colspan]="actionButtons && actionButtons.length != 0 ? columnSettings.length + 1 : columnSettings.length">
-              {{emptyText | translate}}
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        @if (columnSettings) {
+          <table class="table-border table-hover">
+            <thead>
+              @if (actionButtons && actionButtons.length != 0) {
+                <th>
+                  {{actionButtonTitle | translate}}
+                </th>
+              }
+              @for (column of columnSettings; track column; let i = $index) {
+                @if (column.display) {
+                  <th [ngStyle]="column.width ? {'width': column.width} : {}">
+                    <div class="w-100 text-center"
+                      title="{{column.title | translate}}">
+                      <input class="column-direction" #sortColumnDirection type="checkbox" hidden/>
+                      @if (!enableColumnSorting) {
+                        <strong>{{column.title | translate}}</strong>
+                      }
+                      @if (enableColumnSorting) {
+                        <strong class="sort"
+                          (click)="sortByColumn(column, sortColumnDirection)">
+                          {{column.title | translate}}
+                        </strong>
+                      }
+                    </div>
+                    @if (enableColumnFiltering) {
+                      <input class="column-key-search" #filterKeyword class="table-input"
+                        type="text"
+                        placeholder="{{column.title | translate}}"
+                        (keyup)="filterTable(column, filterKeyword.value)"/>
+                    }
+                  </th>
+                }
+              }
+            </thead>
+            <tbody [ngStyle]="height.length != 0 ? {'max-height': height} : {}">
+              @for (row of rowsToDisplay; track row; let i = $index) {
+                <tr
+                  [ngClass]="colorVariationLineBreak !== 0 && (i + 1) % colorVariationLineBreak == 0 ? 'table-mark' : ''" #nativeElement>
+                  {{ rowDisplayed(row.data, nativeElement)}}
+                  @if (actionButtons && actionButtons.length != 0) {
+                    <td>
+                      <div class="flex-center">
+                        @for (actionButton of row.actionButtons; track actionButton) {
+                          <div class="action-button action-button-margin" title="{{actionButton.tooltip | translate}}"
+                            (click)="onActionButtonClicked(actionButton, i)">
+                            @if (actionButton.html.length != 0) {
+                              <div
+                                class="{{getClass(actionButton)}}"
+                              [innerHtml]="sanitize(actionButton.html)"></div>
+                            }
+                            @if (actionButton.html.length == 0 && actionButton.icon.length != 0) {
+                              @if (actionButton.icon.includes('/')) {
+                                <img  class="{{getClass(actionButton)}}" [src]="actionButton.icon"
+                                  alt="{{actionButton.tooltip | translate}}">
+                              }
+                              @if (!actionButton.icon.includes('/')) {
+                                <i class="{{  getClass(actionButton)  + ' ' + actionButton.icon}}"></i>
+                              }
+                            }
+                            @if (actionButton.html.length == 0 && actionButton.icon.length == 0) {
+                              <a  class="{{getClass(actionButton)}}">
+                                {{actionButton.text | translate}}
+                              </a>
+                            }
+                          </div>
+                        }
+                        @if (row.collapsedActionButtons.length !== 0) {
+                          <div  class="action-button action-button-margin" title="{{collapseActionButton.tooltip | translate}}">
+                            <ul class="collapse-action-button">
+                              <li>
+                                @if (collapseActionButton.html.length != 0) {
+                                  <div
+                                  [innerHtml]="sanitize(collapseActionButton.html)"></div>
+                                }
+                                @if (collapseActionButton.html.length == 0 && collapseActionButton.icon.length != 0) {
+                                  @if (collapseActionButton.icon.includes('/')) {
+                                    <img  [src]="collapseActionButton.icon"
+                                      alt="{{collapseActionButton.tooltip | translate}}">
+                                  }
+                                  @if (!collapseActionButton.icon.includes('/')) {
+                                    <i class="{{collapseActionButton.icon}}"></i>
+                                  }
+                                }
+                                @if (collapseActionButton.html.length == 0 && collapseActionButton.icon.length == 0) {
+                                  <a>
+                                    {{collapseActionButton.text | translate}}
+                                  </a>
+                                }
+                                <ul class="collapse-container {{ getCollapsePosition() }}">
+                                  @for (collapsedButton of row.collapsedActionButtons; track collapsedButton) {
+                                    <li>
+                                      <div
+                                        class="{{getClass(collapsedButton)}}"
+                                        class="collapse-button" title="{{collapsedButton.tooltip | translate}}"
+                                        (click)="onActionButtonClicked(collapsedButton, i)">
+                                        @if (collapsedButton.html.length != 0) {
+                                          <div  class="{{getClass(collapsedButton)}}" [innerHtml]="sanitize(collapsedButton.html)"></div>
+                                        }
+                                        @if (collapsedButton.html.length == 0 && collapsedButton.icon.length != 0) {
+                                          @if (collapsedButton.icon.includes('/')) {
+                                            <img [src]="collapsedButton.icon"
+                                              alt="{{collapsedButton.tooltip | translate}}">
+                                          }
+                                          @if (!collapsedButton.icon.includes('/')) {
+                                            <i class="{{  getClass(collapsedButton)  + ' ' + collapsedButton.icon}}"></i>
+                                          }
+                                        }
+                                        @if (collapsedButton.html.length == 0 && collapsedButton.icon.length == 0) {
+                                          <a class="{{getClass(collapsedButton)}}">{{collapsedButton.text | translate}}</a>
+                                        }
+                                      </div>
+                                    </li>
+                                  }
+                                </ul>
+                              </li>
+                            </ul>
+                          </div>
+                        }
+                      </div>
+                    </td>
+                  }
+                  @for (column of columnSettings; track column; let i = $index) {
+                    @if (column.display) {
+                      <td
+                        title="{{tableDataTitleAttribute(row.data,column)}}">
+                        <div class="cell-content" [innerHtml]="columnDisplayValue(row.data,column)"></div>
+                      </td>
+                    }
+                  }
+                </tr>
+              }
+              @if (rowsToDisplay.length === 0) {
+                <tr class="table-no-content">
+                  <td [attr.colspan]="actionButtons && actionButtons.length != 0 ? columnSettings.length + 1 : columnSettings.length">
+                    {{emptyText | translate}}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
       </div>
     </div>
     <div class="table-footer">
-      <div class="flex-between m-3"
-           *ngIf="totalPages && totalElements &&  elementPerPageList &&  elementPerPageList.length !=0 && totalElements > elementPerPageList[0]">
-        <div *ngIf="totalElementsText.length !== 0">
-          {{totalElementsText | translate}}: {{rowsToDisplay.length !== 0 ? (rowsToDisplay.length + '/' + totalElements) : 0}}
+      @if (totalPages && totalElements &&  elementPerPageList &&  elementPerPageList.length !=0 && totalElements > elementPerPageList[0]) {
+        <div class="flex-between m-3"
+          >
+          @if (totalElementsText.length !== 0) {
+            <div>
+              {{totalElementsText | translate}}: {{rowsToDisplay.length !== 0 ? (rowsToDisplay.length + '/' + totalElements) : 0}}
+            </div>
+          }
+          <div class="flex mt-2 mb-2">
+            @if (maxSizeText.length !== 0) {
+              <div class="mr-1 size">{{maxSizeText | translate}}:</div>
+            }
+            <select [(ngModel)]="elementPerPage" (change)="onElementPerPageChange()">
+              @for (element of elementPerPageList; track element) {
+                <option>{{element}}</option>
+              }
+            </select>
+            <nav>
+              <ul class="table-pagination justify-content-center">
+                <li class="table-page-item" [ngClass]="pageStart <= pagesRangeLimit ? 'disabled' : ''">
+                  <a class="table-page-link" (click)="previousPages()">
+                    @if (paginationPreviousIcon.length !== 0) {
+                      @if (paginationPreviousIcon.includes('/')) {
+                        <img [src]="paginationPreviousIcon">
+                      }
+                      @if (!paginationPreviousIcon.includes('/')) {
+                        <i class="{{paginationPreviousIcon}}"></i>
+                      }
+                    }
+                    @if (paginationPreviousIcon.length === 0) {
+                      {{paginationPreviousText | translate}}
+                    }
+                  </a>
+                </li>
+                @for (page of pages(); track page) {
+                  <li class="table-page-item"
+                    [ngClass]="page == pageSelected ? 'active' : ''">
+                    <a class="table-page-link" (click)="onPageChange(page)">{{page}}</a>
+                  </li>
+                }
+                <li class="table-page-item" [ngClass]="pageStart + pagesRangeLimit - 1 >= totalPages ? 'disabled' : ''">
+                  <a class="table-page-link" (click)="nextPages()">
+                    @if (paginationNextIcon.length !== 0) {
+                      @if (paginationNextIcon.includes('/')) {
+                        <img [src]="paginationNextIcon">
+                      }
+                      @if (!paginationNextIcon.includes('/')) {
+                        <i class="{{paginationNextIcon}}"></i>
+                      }
+                    }
+                    @if (paginationNextIcon.length === 0) {
+                      {{paginationNextText | translate}}
+                    }
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
-        <div class="flex mt-2 mb-2">
-          <div class="mr-1 size" *ngIf="maxSizeText.length !== 0">{{maxSizeText | translate}}:</div>
-          <select [(ngModel)]="elementPerPage" (change)="onElementPerPageChange()">
-            <option *ngFor="let element of elementPerPageList">{{element}}</option>
-          </select>
-          <nav>
-            <ul class="table-pagination justify-content-center">
-              <li class="table-page-item" [ngClass]="pageStart <= pagesRangeLimit ? 'disabled' : ''">
-                <a class="table-page-link" (click)="previousPages()">
-                  <ng-container *ngIf="paginationPreviousIcon.length !== 0">
-                    <img *ngIf="paginationPreviousIcon.includes('/')" [src]="paginationPreviousIcon">
-                    <i *ngIf="!paginationPreviousIcon.includes('/')" class="{{paginationPreviousIcon}}"></i>
-                  </ng-container>
-                  <ng-container *ngIf="paginationPreviousIcon.length === 0">
-                    {{paginationPreviousText | translate}}
-                  </ng-container>
-                </a>
-              </li>
-              <li class="table-page-item" *ngFor="let page of pages()"
-                  [ngClass]="page == pageSelected ? 'active' : ''">
-                <a class="table-page-link" (click)="onPageChange(page)">{{page}}</a>
-              </li>
-              <li class="table-page-item" [ngClass]="pageStart + pagesRangeLimit - 1 >= totalPages ? 'disabled' : ''">
-                <a class="table-page-link" (click)="nextPages()">
-                  <ng-container *ngIf="paginationNextIcon.length !== 0">
-                    <img *ngIf="paginationNextIcon.includes('/')" [src]="paginationNextIcon">
-                    <i *ngIf="!paginationNextIcon.includes('/')" class="{{paginationNextIcon}}"></i>
-                  </ng-container>
-                  <ng-container *ngIf="paginationNextIcon.length === 0">
-                    {{paginationNextText | translate}}
-                  </ng-container>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
+      }
     </div>
   </div>
   <div style="margin: 0; opacity: 0;height: 0;width: 0;">Built with love by Klaus Laghom and Romeo Njinang</div>
