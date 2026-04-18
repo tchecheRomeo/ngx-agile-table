@@ -26,7 +26,9 @@
     "next": "Next",
     "empty_data": "No content",
     "female": "Female",
-    "male": "Male"
+    "male": "Male",
+    "github_repositories_explorer": "Public github repositories explorer (Live Data)",
+    "search_public_git_repository": "Search public github repositories by name (press enter to search)"
   },
   "column": {
     "first_name": "First Name",
@@ -35,12 +37,16 @@
     "country": "Country",
     "first_po_box": "First P.O Box",
     "date": "Date",
+    "creation_date": "Creation date",
     "customer_name": "Customer Name",
     "customer_gender": "Customer Gender",
     "beneficiary_name": "Beneficiary Name",
     "amount": "Amount",
     "fees": "Fees (20% amount)",
-    "status": "Status"
+    "status": "Status",
+    "git_owner": "Login owner",
+    "git_name": "Name repository",
+    "description": "Description"
   },
   "button": {
     "delete": "Delete",

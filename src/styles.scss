@@ -2,92 +2,191 @@
 /* You can add global styles to this file, and also import other style files */
 
 .edit-bg, .green-bg, .delete-bg, .red-bg {
-    width: 20px;
-    height: 20px;
-    padding: 3px;
-    border-radius: 3px;
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+  border-radius: 3px;
+}
+
+.edit-bgd {
+  width: 20px;
+  height: 30px;
+  padding: 3px;
+  border-radius: 3px;
+  background-color: #4f197e;
+}
+
+.edit-bg:hover {
+  background-color: #1496bb;
+}
+
+.edit-bg {
+  background-color: #4f197e;
+}
+
+.green-bg {
+  background-color: green;
+}
+
+.delete-bg, .red-bg {
+  background-color: red;
+}
+
+.row-danger, .row-danger:hover {
+  background-color: #ff000075 !important;
+}
+
+.row-danger td {
+  border: none !important;;
+}
+
+.customization .ngx-table {
+  table {
+    border-bottom: 5px solid #01987a;
+    background-color: #01987a !important;
+    border-radius: 10px 10px 0 0 !important;
   }
-  .edit-bgd {
-    width: 20px;
-    height: 30px;
-    padding: 3px;
-    border-radius: 3px;
-    background-color: #4f197e;
+
+  table tbody {
+    background-color: white !important;
   }
-  
-  .edit-bg:hover {
-    background-color: #1496bb;
+
+  table th {
+    border: none !important;
+    background-color: #01987a !important;
+    color: white !important;
   }
-  
-  .edit-bg {
-    background-color: #4f197e;
+
+  table th:first-child {
+    border-radius: 10px 0 0 0 !important;
   }
-  
-  .green-bg {
-    background-color: green;
+
+  table th:last-child {
+    border-radius: 0 10px 0 0 !important;
   }
-  
-  .delete-bg, .red-bg {
-    background-color: red;
+
+  table tbody .table-mark {
+    color: #01987a !important;
+    background-color: #01987a1a !important;
+    border-bottom: 1px solid #01987a1a !important;
+    border-top: 1px solid #01987a1a !important;
   }
-  
-  .row-danger, .row-danger:hover {
-    background-color: #ff000075 !important;
+  table tr:hover {
+    background-color: #01987a1a !important;
   }
-  
-  .row-danger td {
-    border: none !important;;
+
+  table input {
+    border-radius: 30px !important;
+    border: 1px solid white !important;
+    padding: 4px !important;
+    outline: none !important;
   }
-  
-  .customization .ngx-table {
-    table {
-      border-bottom: 5px solid #01987a;
-      background-color: #01987a !important;
-      border-radius: 10px 10px 0 0 !important;
+
+  #search {
+    border-radius: 30px !important;
+    border: 1px solid #01987a !important;
+    padding: 14px !important;
+    outline: none !important;
+    width: 100%;
+    max-width: 100%;
+    font: 16px Arial, sans-serif;
+  }
+
+  table .table-no-content {
+    background-color: #01987a1a !important;
+    color: #01987a !important;
+  }
+
+  table tbody td {
+    border: none !important;
+  }
+
+  .table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #4a5568;
+
+    .flex-between {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
     }
-  
-    table tbody {
-      background-color: white !important;
+
+    .flex {
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
-  
-    table th {
-      border: none !important;
-      background-color: #01987a !important;
-      color: white !important;
+
+    select {
+      background-color: #fff;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      padding: 5px 30px 5px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      background-size: 14px;
+      transition: all 0.2s ease;
     }
-  
-    table th:first-child {
-      border-radius: 10px 0 0 0 !important;
+
+    select:focus {
+      outline: none;
+      border-color: #01987a;
+      box-shadow: 0 0 0 3px rgba(1, 152, 122, 0.1);
     }
-  
-    table th:last-child {
-      border-radius: 0 10px 0 0 !important;
+
+    .table-pagination {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 5px;
     }
-  
-    table tbody .table-mark {
-      color: #01987a !important;
-      background-color: #01987a1a !important;
-      border-bottom: 1px solid #01987a1a !important;
-      border-top: 1px solid #01987a1a !important;
+
+    .table-page-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 32px;
+      padding: 0 8px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e0;
+      background: #fff;
+      color: #4a5568;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
-    table tr:hover {
-      background-color: #01987a1a !important;
+
+    .table-page-item:hover:not(.disabled) .table-page-link {
+      background-color: #f7fafc;
+      border-color: #01987a;
+      color: #01987a;
     }
-  
-    table input {
-      border-radius: 30px !important;
-      border: 1px solid white !important;
-      padding: 4px !important;
-      outline: none !important;
+
+    .table-page-item.active .table-page-link {
+      background-color: #01987a;
+      border-color: #01987a;
+      color: #ffffff;
     }
-  
-    table .table-no-content {
-      background-color: #01987a1a !important;
-      color: #01987a !important;
+
+    .table-page-item.disabled .table-page-link {
+      background-color: #edf2f7;
+      color: #a0aec0;
+      cursor: not-allowed;
+      border-color: #edf2f7;
     }
-  
-    table tbody td {
-      border: none !important;
+
+    .size {
+      font-weight: 500;
+      color: #718096;
     }
   }
-  
+}

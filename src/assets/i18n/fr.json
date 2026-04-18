@@ -26,7 +26,9 @@
      "next": "Suivant",
      "empty_data": "Aucun contenu",
      "female": "Femme",
-     "male": "Mâle"
+     "male": "Mâle",
+    "github_repositories_explorer": "Explorateur de dépôt public Github (Live Data)",
+    "search_public_git_repository": "Rechercher un dépôt publique par nom (appuyer sur entrée pour rechercher)"
    },
    "column": {
      "first_name": "Prénom",
@@ -35,12 +37,16 @@
      "country": "Pays",
      "first_po_box": "Première boîte postale",
      "date": "Date",
+     "creation_date": "Date création",
      "customer_name": "Nom du client",
      "customer_gender": "Sexe du client",
      "beneficiary_name": "Nom du bénéficiaire",
      "amount": "Montant",
      "fees": "Frais (montant de 20%)",
-     "status": "Statut"
+     "status": "Statut",
+    "git_owner": "Login propriétaire",
+    "git_name": "Nom du dépôt",
+    "description": "Description"
    },
    "button": {
      "delete": "Supprimer",

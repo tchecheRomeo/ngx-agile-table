@@ -16,13 +16,26 @@
   {{'text.full_customization' | translate }}
 </h1>
 
-<p>{{'text.students_list_customized' | translate }}</p>
+<p>{{'text.github_repositories_explorer' | translate }}</p>
 
 <div class="customization">
   <ngx-table
-    [columnSettings]="customerColumns"
-    [data]="customers"
+    [columnSettings]="repositoriesColumns"
+    [data]="repositories"
+    [totalElements]="repositoriesTotal"
+    [totalPages]="repositoriesTotalPages"
+    [pageSelected]="repositoriesPage"
+    [elementPerPage]="repositoriesSize"
+    [displayGlobalSearchInput]="true"
+    [searchText]="'text.search_public_git_repository'"
+    (onGlobalSearchRequest)="onSearch($event)"
+    (onPageChanged)="pageChange($event)"
+    (onElementPerPageChanged)="elementPerPageChange($event)"
     [emptyText]="'text.empty_data'"
+    [maxSizeText]="'text.max_size'"
+    [totalElementsText]="'text.total_elements'"
+    [paginationPreviousText]="'text.previous'"
+    [paginationNextText]="'text.next'"
   >
 
   </ngx-table>
