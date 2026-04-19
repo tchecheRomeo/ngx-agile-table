@@ -19,13 +19,15 @@ See live demo [Stackblitz](https://stackblitz.com/edit/ngx-agile-table).
 | >=13.0.0 | v1.x | YES |
 | >=18.0.0 | v2.9.0 | YES |
 | >=19.0.0 | v3.x | YES |
+| >=20.0.0 | v4.x | YES |
+| >=21.0.0 | v5.x | YES |
 
 ## Installation
 
 The library is available as npm package, so all you need to do is to run the following command
 
 ```bash
-  npm install --save @ngx-translate/core@14.0.0 @ngx-translate/http-loader@7.0.0 ngx-agile-table@v2.9.0
+  npm install --save @ngx-translate/core@17.0.0 @ngx-translate/http-loader@17.0.0 ngx-agile-table
 ```
 ## Minimal Setup Example
 
@@ -138,6 +140,7 @@ Well done !!!
 | totalElementsText | string | Total Elements | Total element text to diplay
 | totalPages | number | 0 | Total pages. Calculate automatically if local pagination enabled.
 | elementPerPage | number | 10 | Default element per page
+| pageSelected | number | 1 | The current page if you implemented your own pagination logic
 | elementPerPageList | number[] | [20, 50, 100, 200] | Element per page range |
 | displayGlobalSearchInput | boolean | false | show/hide global search input |
 | searchText | string | Search | The search text placeholder |

@@ -93,6 +93,9 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   @Input()
   localPagination: boolean = false;
 
+  @Input()
+  pageSelected: number = 1;
+
   @Output()
   onClickActionButton: EventEmitter<ActionButtonTable> = new EventEmitter();
 
@@ -108,7 +111,6 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   @Output()
   onRowDisplayed: EventEmitter<RowTable> = new EventEmitter();
 
-  pageSelected: number = 1;
   collapseActionButtonPositions: string[] = ['right', 'bottom'];
 
   pagesRangeLimit = 5;
@@ -122,6 +124,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
   columnSort: ColumnTable = new ColumnTable('');
   rows: Row[] = [];
   rowsToDisplay: Row[] = [];
+  columnFilterKeywordMap: Map<ColumnTable, string> = new Map();
 
   constructor() {
   }
@@ -161,7 +164,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
         );
 
         if (canDisplayButton) {
-          if ( this.actionButtons.length <= this.maxActionButtonPerRow || 
+          if ( this.actionButtons.length <= this.maxActionButtonPerRow ||
                row.actionButtons.length < this.maxActionButtonPerRow - 1) { // -1 for collapse button
             row.actionButtons.push(actionButton);
           } else {
@@ -239,8 +242,9 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     }
     if (this.elementPerPageList && this.elementPerPage) {
       if (this.elementPerPageList.length === 0) {
-        this.elementPerPageList = [this.elementPerPage, 20, 50, 100, 200];
+        this.elementPerPageList = [20, 50, 100, 200];
       }
+      this.elementPerPage = parseInt(this.elementPerPage + ''); // Make sure that elementPerPage is int before indexOf.
       if (this.elementPerPageList.indexOf(this.elementPerPage) === -1) {
         this.elementPerPageList.push(this.elementPerPage);
       }
@@ -252,13 +256,18 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
 
   displayData() {
     this.formatRows();
-
     if (this.localPagination) {
       this.totalPageCalculation();
       this.rowsToDisplay = this.segmentation(1);
     } else {
-      let rows:Row[] = [];
+      let rows: Row[] = [];
       this.rowsToDisplay = rows.concat(this.rows);
+    }
+
+    if (this.columnFilterKeywordMap.size !== 0) {
+      this.filterTable(this.columnSearch, this.columnSearchKeyword);
+    } else if (this.columnSort && this.columnSort.title.length !== 0) {
+      this.sortDataDisplay(this.columnSort, this.columnSortDirectionAsc);
     }
   }
 
@@ -327,7 +336,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     if (this.localPagination) {
       if (this.columnSearchKeyword && this.columnSearchKeyword !== '') {
         this.filterTable(this.columnSearch, this.columnSearchKeyword, page);
-      } else if (this.columnSort) {
+      } else if (this.columnSort && this.columnSort.title.length !== 0) {
         this.sortDataDisplay(this.columnSort, this.columnSortDirectionAsc, page);
       } else {
         this.rowsToDisplay = this.segmentation(page);
@@ -342,7 +351,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
     if (this.localPagination) {
       if (this.columnSearchKeyword && this.columnSearchKeyword !== '') {
         this.filterTable(this.columnSearch, this.columnSearchKeyword, 1);
-      } else if (this.columnSort) {
+      } else if (this.columnSort && this.columnSort.title.length !== 0) {
         this.sortDataDisplay(this.columnSort, this.columnSortDirectionAsc, 1);
       } else {
         this.resetTotalPages();
@@ -355,25 +364,46 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
 
   filterTable(columnTable: ColumnTable, keyword: string, page?: number) {
     let searchResults: any[];
-    if (keyword && keyword !== '') {
-      searchResults = this.rows.filter(r => (this.cellDataValue(r.data, columnTable)
-        .researchData + '').toLowerCase().includes(keyword.toLowerCase()));
+    if (keyword && keyword.length > 0) {
+      this.columnFilterKeywordMap.set(columnTable, keyword);
+    } else {
+      if (this.columnFilterKeywordMap.has(columnTable)) {
+          this.columnFilterKeywordMap.delete(columnTable);
+      }
+    }
+
+    if(this.columnFilterKeywordMap.size !== 0) {
+      searchResults = this.rows.filter(r => {
+          let matched: boolean = true;
+          for (const [column, word] of this.columnFilterKeywordMap) {
+              matched = matched && (this.cellDataValue(r.data, column)
+                .researchData + '').toLowerCase().includes(word.toLowerCase());
+          }
+          return matched;
+      });
     } else {
       searchResults = this.rows;
     }
 
-    this.rowsToDisplay = this.segmentation(page ? page : 1, searchResults);
-    this.resetTotalPages(searchResults);
+    if(this.localPagination) {
+      this.rowsToDisplay = this.segmentation(page ? page : this.pageSelected, searchResults);
+      this.resetTotalPages(searchResults);
+    } else {
+      this.rowsToDisplay = searchResults;
+    }
 
     this.columnSearchKeyword = keyword;
     this.columnSearch = columnTable;
+    if(this.columnSort && this.columnSort.title.length !== 0) {
+      this.sortDataDisplay(this.columnSort, this.columnSortDirectionAsc, page);
+    }
   }
 
   sortDataDisplay(columnTable: ColumnTable, ascFiltering: boolean, page?: number) {
     let searchResults: any[];
 
     if (ascFiltering) {
-      searchResults = this.rows.sort((a, b) => {
+      searchResults = this.rowsToDisplay.sort((a, b) => {
         let value: any = this.cellDataValue(a.data, columnTable).researchData;
         let value2: any = this.cellDataValue(b.data, columnTable).researchData;
         value = parseFloat(value) ? parseFloat(value) : value;
@@ -388,7 +418,7 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
         return 0;
       });
     } else {
-      searchResults = this.rows.sort((a, b) => {
+      searchResults = this.rowsToDisplay.sort((a, b) => {
         let value: any = this.cellDataValue(a.data, columnTable).researchData;
         let value2: any = this.cellDataValue(b.data, columnTable).researchData;
         value = parseFloat(value) ? parseFloat(value) : value;
@@ -404,8 +434,12 @@ export class NgxAgileTableComponent implements OnInit, OnChanges {
       });
     }
 
-    this.rowsToDisplay = this.segmentation(page ? page : 1, searchResults);
-    this.resetTotalPages(searchResults);
+    if(this.localPagination) {
+      this.rowsToDisplay = this.segmentation(page ? page : this.pageSelected, searchResults);
+      this.resetTotalPages(searchResults);
+    } else {
+      this.rowsToDisplay = searchResults;
+    }
 
     this.columnSortDirectionAsc = ascFiltering;
     this.columnSort = columnTable;

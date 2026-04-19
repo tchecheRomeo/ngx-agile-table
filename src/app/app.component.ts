@@ -3,6 +3,7 @@ import {ActionButtonTable, ColumnTable, RowTable} from 'ngx-agile-table';
 import {CellData} from '../../projects/ngx-agile-table/src/lib/models/cell-data.model';
 import {DecimalPipe} from '@angular/common';
 import {TranslateService} from '@ngx-translate/core';
+import {GithubService} from "./github.service";
 
 @Component({
     selector: 'app-root',
@@ -20,6 +21,18 @@ export class AppComponent implements OnInit {
     new ColumnTable('column.first_po_box', 'address.box[0].name')
   ];
 
+  repositoriesColumns: ColumnTable[] = [
+    new ColumnTable('column.date', 'created_at').customCell(data => {
+        const value = ('' + data).replace('T', ' ').replace('Z', '');
+        return new CellData(value, value);
+      }),
+    new ColumnTable('column.git_owner', 'owner.login'),
+    new ColumnTable('column.git_name', 'name').customCell((cellData, data) => {
+        return new CellData('<a href="' + data.html_url + '" target="_blank">' + cellData + '</a>', cellData);
+      }),
+    new ColumnTable('column.description', 'description')
+  ];
+
   actionButtons: ActionButtonTable[] = [
     new ActionButtonTable('delete', 'button.delete')
       .displayCondition((data) => data.amount % 300 === 0)
@@ -35,7 +48,7 @@ export class AppComponent implements OnInit {
       .htmlValue('<img class="edit-bg" src="/assets/icons/eyes.png" alt="Image">'),
     new ActionButtonTable('retry', 'button.retry'),
     new ActionButtonTable('cancel', 'button.cancel')
-   
+
   ];
 
   transactionColumns: ColumnTable[] = [
@@ -67,16 +80,23 @@ export class AppComponent implements OnInit {
     ];
 
   constructor(private renderer: Renderer2, private decimalPipe: DecimalPipe,
-              private translate: TranslateService) {
+              private translate: TranslateService, private githubService: GithubService) {
     translate.addLangs(['en', 'fr']);
     const browserLang: string = '' + translate.getBrowserLang();
     this.lang = browserLang.match(/en|fr/) ? browserLang : 'en';
-    translate.setDefaultLang(this.lang);
+    // translate.setDefaultLang(this.lang);
     translate.use(this.lang);
 
   }
 
   customers: any[] = [];
+  repositories: any[] = [];
+  repositoriesPage: number = 1;
+  repositoriesSize: number = 20;
+  repositoriesTotal: number = 0;
+  repositoriesTotalPages: number = 0;
+  repositoriesSearchText: string = 'angular';
+
   transactions: never[] = [];
   totalPages: number = 5;
   elementPerPage: number = 5;
@@ -121,6 +141,7 @@ export class AppComponent implements OnInit {
     }
 
     this.customers = fakeCustomers;
+    this.loadGithubRepositories();
 
     const fakeTransactions:any = [];
     for (let i = 1; i <= this.totalTransactions; i++) {
@@ -135,6 +156,39 @@ export class AppComponent implements OnInit {
     }
 
     this.transactions = fakeTransactions;
+  }
+
+  private loadGithubRepositories() {
+    this.githubService.searchRepos(this.repositoriesPage, this.repositoriesSize, this.repositoriesSearchText)
+      .subscribe({
+        next: (res) => {
+          this.repositories = res.data;
+          this.repositoriesTotal = res.total;
+          this.repositoriesTotalPages = this.repositoriesTotal / this.repositoriesSize;
+        },
+        error: () => {
+
+        }
+      });
+  }
+
+  onSearch(text: string) {
+    this.repositoriesSearchText = text;
+    this.repositoriesPage = 1;
+
+    this.loadGithubRepositories();
+  }
+
+  pageChange(value: number) {
+    this.repositoriesPage = value;
+    this.loadGithubRepositories();
+  }
+
+  elementPerPageChange(value: number) {
+    this.repositoriesPage = 1;
+    this.repositoriesSize = value;
+
+    this.loadGithubRepositories();
   }
 
   onActionButtonClicked(actionButton: ActionButtonTable) {
